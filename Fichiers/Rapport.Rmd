@@ -1,0 +1,46 @@
+---
+title: "Rapport"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questions Théoriques
+
+#test
+
+Test $\sum _{i=1}^{N} x_{i}=3$
+
+Test avec align
+
+\begin{align*} 
+2x - 5y &=  8 \\ 
+3x + 9y &=  -12
+\end{align*}
+
+
+# Question test
+
+```{r weisberg56}
+data=read.table("weisberg56.dat",header=TRUE)
+head(data)
+fit=lm(SOMA ~ WT2+HT2+WT9+HT9+LG9+ST9, data = data)
+summary(fit)
+anova(fit)
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
