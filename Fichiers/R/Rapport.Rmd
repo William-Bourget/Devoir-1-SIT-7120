@@ -9,38 +9,193 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Questions Théoriques
+##T-2
+### #2
+La fonction réciproque est la suivante: $g(u)=\frac{1}{u}$. Par conséquent, on obtient: $u_{i}=\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}$
 
-#test
 
-Test $\sum _{i=1}^{N} x_{i}=3$
-
-Test avec align
+####a)
+Dans le cas où $x_{i1}$ augmente de 1, on obtient que Y augmente de:
 
 \begin{align*} 
-2x - 5y &=  8 \\ 
-3x + 9y &=  -12
+E[Y_{i};x_{i1}=x_{i1}^{*}+1]-E[Y_{i};x_{i1}=x_{i1}^{*}] &=  \frac{1}{\beta_{0}+\beta_{1}(x_{i1}+1)+x_{i2}} -\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}
+\end{align*}
+
+####b)
+Dans le cas où $x_{i2}$ augmente de 1, on obtient que Y augmente de:
+
+\begin{align*} 
+E[Y_{i};x_{i2}=x_{i2}^{*}+1]-E[Y_{i};x_{i2}=x_{i2}^{*}] &=  \frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}+1} -\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}
+\end{align*}
+
+#####c)
+On calcul les intervalles de confiance de Wald pour nos $\hat{\beta_{j}}$
+\begin{align*} 
+IC(\hat{\beta_{j}},\alpha)&= \hat{\beta_{j}} \pm z_{\alpha/2} \sqrt{\hat{Var(\hat{\beta_{j}})}}\\
+IC(\hat{\beta_{0}},0.95)&= 0.1 \pm 1.96 \sqrt{0.000625} =[0.051, 0.149]\\
+IC(\hat{\beta_{1}},0.95)&= -0.01 \pm 1.96 \sqrt{0.000016} =[0.01784, -0.00216]
+\end{align*}
+
+####d)
+L'intervalle de confiance pour notre prédicteur linéaire $\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}}$ est $\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}} \pm z_{\alpha/2} \sqrt{v^{2}(\boldsymbol{x}_{0})}$
+
+
+\begin{align*} 
+v^{2}(\boldsymbol{x}_{0})&= \hat{Var}\left(\sum_{j=0}^{p'}x_{0j}\hat{\beta_{j}}\right)\\
+&=\hat{Var}(\hat{\beta_{0}})+ x_{01}^{2}\hat{Var}(\hat{\beta_{1}}) +2x_{01}\hat{Cov}(\hat{\beta_{0}},\hat{\beta_{1}})\\
+&=0.000625+5^{2}*0000016+2*5*-0.0001\\
+&=0.000025
+\end{align*}
+
+On obtient donc:
+
+$IC(\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}},0.95)=0.1-5*0.01+0.5 \pm 1.96\sqrt{0.000025} =[0.5402, 0.5598]$
+
+On peut maintenant trouver notre intervalle de confiance pour $Y_{i}$:
+
+$IC(Y_{i},0.95)=\frac{1}{IC(\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}},0.95)}=[1.786, 1.851166]$
+
+### #4
+#####a)
+Selon notre fonction, on obtient:
+
+
+\begin{align*} 
+\ell(\beta_{0},\beta_{1};Y)&=\sum_{i=1}^{n} ln(f(y_{i}|x_{i};\beta_{0},\beta_{1})) \\
+&=\sum_{i=1}^{n} ln(\frac{1}{u_{i}}e^{-\frac{y_{i}}{u_{i}}})\\
+&=\sum_{i=1}^{n} ln(\frac{1}{u_{i}})-\frac{y_{i}}{u_{i}} \\
+&=\sum_{i=1}^{n} ln(\beta_{0}+\beta_{1}x_{i})-y_{i}(\beta_{0}+\beta_{1}x_{i})  \\
+\end{align*}
+
+####b) 
+On cherche la déviance. On sait que $\ell(u;Y)=\sum_{i=1}^{n} ln(\frac{1}{u_{i}})-\frac{y_{i}}{u_{i}}$
+
+\begin{align*} 
+D(Y,u)&=2(\ell(y;Y)-\ell(u;Y))\\
+&=2(\ell(y;Y)-\ell(g^{-1}(\beta_{0}+\beta_{1}x_{i};Y))\\
+&=2\left(\sum_{i=1}^{n} ln(\frac{1}{y_{i}})-\frac{y_{i}}{y_{i}}-\sum_{i=1}^{n} ln(\beta_{0}+\beta_{1}x_{i})-y_{i}(\beta_{0}+\beta_{1}x_{i})\right)\\
+&=2\left(\sum_{i=1}^{n} ln(\frac{1}{y_{i}})-1-ln(\beta_{0}+\beta_{1}x_{i})+y_{i}(\beta_{0}+\beta_{1}x_{i})\right)
+\end{align*}
+
+### #5
+####a)
+On peut peut expremer $u_{i}$ de la façon suivante:
+$u_{i}=exp\left(\beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+ln(v_{i})\right)=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}$. Par conséquent, si on remplace $v_{i}$ par $v_{i}^{*}=1.05v_{i}$, on obtient:
+
+\begin{align*} 
+u_{i}^{*}&=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}^{*}\\
+u_{i}^{*}&=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}1.05\\
+u_{i}^{*}&=u_{i}*1.05
 \end{align*}
 
 
-# Question test
-
-```{r weisberg56}
+```{r functions, echo=FALSE,include=FALSE}
+library(olsrr)
+options(scipen = 5)
+options(digits=5)
 data=read.table("weisberg56.dat",header=TRUE)
-head(data)
-fit=lm(SOMA ~ WT2+HT2+WT9+HT9+LG9+ST9, data = data)
-summary(fit)
-anova(fit)
+```
+
+#### b)
+
+\begin{align*} 
+u_{i}^{*}&=e^{\beta_{0}}e^{0.24(x_{i1}+1)}e^{\beta_{2}x_{i2}}v_{i}\\
+u_{i}^{*}&=e^{\beta_{0}}e^{0.24x_{i1}}e^{0.24}e^{\beta_{2}x_{i2}}v_{i}\\
+u_{i}^{*}&=u_{i}e^{0.24}\\
+u_{i}^{*}&=u_{i}1.27
+\end{align*}
+
+Lorsque $x_{i1}$ augmente de une unité, alors la moyenne augmente d'environ 27% ($e^{0.24}$).
+
+#### c)
+On procède au test d'hypothèse suivant:
+
+$H_{0}$: Le modèle poisson est suffisant 
+
+$H_{1}$: Le modèle binomiale négatif est nécessaire
+
+\begin{align*} 
+\epsilon&=D_{0}-D{1}=3.8\\
+p&=0.5P(\chi^{2}_{1}>\epsilon)
+&=0.5P(\chi^{2}_{1}>3.8)
+&=0.02562629
+\end{align*}
+
+Comme la p-value est inférieure à 0.05, on rejète l'hypothèse $H_{0}$. On doit utilise le modèle négative binomial.
+
+
+
+# P-1
+
+###Analyse de multicolinéarité
+Avant de faire notre modèle on peut procéder à une analyse de multicolinéarité en calculant nos facteur d'inflation de la variance (VIF):
+```{r analyse_multi_col1,echo=FALSE}
+
+
+model1=lm(SOMA ~ WT2+HT2+WT9+HT9+LG9+ST9, data = data)
+
+ols_vif_tol(model1)
+ols_coll_diag(model1)
+
+
+```
+Avec cette analyse, on réalise qu'il a certains facteurs d'inflation de la variance supérieur à 10 (WT9 et LG9). On peut aussi observer les indices de conditionnement qui sont calculés à partir des valeurs propres qui atteignent des valeurs supérieur à 30. Finalement, on constate que les variables WT9 et LG9 sont probablement en multicollinéarité, car leur dépendance linéaire $p_{lj}$ sont supérieur à 60% pour l'indice de conditionnement le plus élevé (238.041>30). 
+
+Pour remédier au problème, on peut retirer la variable LG9:
+
+```{r analyse_multi_col2,echo=FALSE}
+
+
+model2=lm(SOMA ~ WT2+HT2+WT9+HT9+ST9, data = data)
+
+ols_vif_tol(model2)
+
+
 
 ```
 
-## Including Plots
+On constate qu'aucun VIF n'est maintenant supérieur à 10. On peut commencer à faire notre modèle avec ces variables.
 
-You can also embed plots, for example:
+###Modèle
+Puisque qu'on a peu de variables dans nos données ($p'=5$), on peut se pemettre de trouver tous les sous-modèles possibles pour ensuite choisir le meilleur:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r tous_models,echo=FALSE}
+
+
+model=lm(SOMA ~ WT2+HT2+WT9+HT9+ST9, data = data)
+
+all_possible<- ols_step_all_possible(model)
+
+#as.data.frame(all_possible[all_possible$fpe== min(all_possible$fpe), ])
+
+as.data.frame(all_possible[25:31,c("mindex","predictors","rsquare","adjr","predrsq","aic")])
+print("Modèle avec meilleur R2 ajusté")
+as.data.frame(all_possible[all_possible$adjr== max(all_possible$adjr), ])
+plot(all_possible)
+
+#ols_step_best_subset(model)
 
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+À partir de ces informations, on peut voir que, basé sur la valeur du $R^{2}_{adj}$, le meilleur modèle est le modèle qui inclus les variables WT2, WT9, HT9 et ST9 (on laisse tomber HT2). On peut toutefois voir que le modèle complet a un meilleur $R^{2}$ que notre modèle réduit. On peut confirmer que notre modèle réduit est toutefois le meilleur, il a également le plus faible AIC (89.471) et la plus grande valeur de $R^{2}_{prev}$ (basée sur PRESS) (0.25032). Les graphiques comfirment les mêmes résultats, notre modèle réduit (#26) est le plus addéquat.
+
+On peut maintenant faire notre prédiction:
+```{r prédiction,echo=FALSE}
+
+
+model=lm(SOMA ~ WT2+WT9+HT9+ST9, data = data)
+vecteur_data=data.frame(WT2=13,WT9=41,HT9=141,ST9=73)
+
+
+#print("Prédiction pour E[Y]")
+#predict(model,newdata = vecteur_data,interval=c("confidence"),level=0.95)
+print("Prédiction pour Y")
+predict(model,newdata = vecteur_data,interval=c("prediction"),level=0.95)
+
+
+```
+
+Avec notre modèle, on peut prédire qu'un enfant de 9 ans ayant ces caractéristiques aurait un somatotype de 6.5168 à l'âge de 18 ans. L'intervalle de confiance 95% de cette estimé ponctuel est de [3.5355, 9.4981]
+
