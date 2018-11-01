@@ -31,7 +31,7 @@ E[Y_{i};x_{i2}=x_{i2}^{*}+1]-E[Y_{i};x_{i2}=x_{i2}^{*}] &=  \frac{1}{\beta_{0}+\
 \end{align*}
 
 #####c)
-On calcul les intervalles de confiance de Wald pour nos $\hat{\beta_{j}}$
+On calcule les intervalles de confiance de Wald pour nos $\hat{\beta_{j}}$
 \begin{align*} 
 IC(\hat{\beta_{j}},\alpha)&= \hat{\beta_{j}} \pm z_{\alpha/2} \sqrt{\hat{Var(\hat{\beta_{j}})}}\\
 IC(\hat{\beta_{0}},0.95)&= 0.1 \pm 1.96 \sqrt{0.000625} =[0.051, 0.149]\\
@@ -81,7 +81,7 @@ D(Y,u)&=2(\ell(y;Y)-\ell(u;Y))\\
 
 ### #5
 ####a)
-On peut peut expremer $u_{i}$ de la façon suivante:
+On peut exprimer $u_{i}$ de la façon suivante:
 $u_{i}=exp\left(\beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+ln(v_{i})\right)=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}$. Par conséquent, si on remplace $v_{i}$ par $v_{i}^{*}=1.05v_{i}$, on obtient:
 
 \begin{align*} 
@@ -123,7 +123,7 @@ p&=0.5P(\chi^{2}_{1}>\epsilon)
 &=0.02562629
 \end{align*}
 
-Comme la p-value est inférieure à 0.05, on rejète l'hypothèse $H_{0}$. On doit utilise le modèle négative binomial.
+Comme la p-value est inférieure à 0.05, on rejète l'hypothèse $H_{0}$. On doit utiliser le modèle de la négative binomiale.
 
 \pagebreak
 # P-1
@@ -140,7 +140,7 @@ ols_coll_diag(model1)
 
 
 ```
-Avec cette analyse, on réalise qu'il a certains facteurs d'inflation de la variance supérieur à 10 (WT9 et LG9). On peut aussi observer les indices de conditionnement qui sont calculés à partir des valeurs propres qui atteignent des valeurs supérieur à 30. Finalement, on constate que les variables WT9 et LG9 sont probablement en multicollinéarité, car leur dépendance linéaire $p_{lj}$ sont supérieur à 60% pour l'indice de conditionnement le plus élevé (238.041>30). 
+Avec cette analyse, on réalise qu'il a certains facteurs d'inflation de la variance supérieur à 10 (WT9 et LG9). On peut aussi observer certains indices de conditionnement qui sont calculés à partir des valeurs propres atteignent des valeurs supérieur à 30. Finalement, on constate que les variables WT9 et LG9 sont probablement en multicollinéarité, car leurs dépendances linéaires $p_{lj}$ sont supérieur à 60% pour l'indice de conditionnement le plus élevé (238.041>30). 
 
 Pour remédier au problème, on peut retirer la variable LG9:
 
@@ -158,7 +158,7 @@ ols_vif_tol(model2)
 On constate qu'aucun VIF n'est maintenant supérieur à 10. On peut commencer à faire notre modèle avec ces variables.
 
 ###Modèle
-Puisque qu'on a peu de variables dans nos données ($p'=5$), on peut se pemettre de trouver tous les sous-modèles possibles pour ensuite choisir le meilleur:
+Puisque qu'on a peu de variables dans nos données ($p'=5$), on peut se permettre de trouver tous les sous-modèles possibles pour ensuite choisir le meilleur:
 
 ```{r tous_models,echo=FALSE}
 
@@ -180,7 +180,7 @@ plot(all_possible)
 ```
 
 
-À partir de ces informations, on peut voir que, basé sur la valeur du $R^{2}_{adj}$, le meilleur modèle est le modèle qui inclus les variables WT2, WT9, HT9 et ST9 (on laisse tomber HT2). On peut toutefois voir que le modèle complet a un meilleur $R^{2}$ que notre modèle réduit. On peut confirmer que notre modèle réduit est toutefois le meilleur, il a également le plus faible AIC (89.471) et la plus grande valeur de $R^{2}_{prev}$ (basée sur PRESS) (0.25032). Les graphiques comfirment les mêmes résultats, notre modèle réduit (#26) est le plus addéquat.
+À partir de ces informations, on peut voir que, basé sur la valeur du $R^{2}_{adj}$, le meilleur modèle est celui qui inclut les variables WT2, WT9, HT9 et ST9 (on laisse tomber HT2). On peut toutefois voir que le modèle complet a un meilleur $R^{2}$ que notre modèle réduit. On peut confirmer que notre modèle réduit est toutefois le meilleur, il a également le plus faible AIC (89.471) et la plus grande valeur de $R^{2}_{prev}$ (basée sur PRESS) (0.25032). Les graphiques comfirment les mêmes résultats, notre modèle réduit (#26) est le plus addéquat.
 
 On peut maintenant faire notre prédiction:
 ```{r prédiction,echo=FALSE}
