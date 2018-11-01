@@ -125,8 +125,7 @@ p&=0.5P(\chi^{2}_{1}>\epsilon)
 
 Comme la p-value est inférieure à 0.05, on rejète l'hypothèse $H_{0}$. On doit utilise le modèle négative binomial.
 
-
-
+\pagebreak
 # P-1
 
 ###Analyse de multicolinéarité
