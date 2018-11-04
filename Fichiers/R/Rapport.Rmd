@@ -90,14 +90,6 @@ u_{i}^{*}&=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}1.05\\
 u_{i}^{*}&=u_{i}*1.05
 \end{align*}
 
-
-```{r functions, echo=FALSE,include=FALSE}
-library(olsrr)
-options(scipen = 5)
-options(digits=5)
-data=read.table("weisberg56.dat",header=TRUE)
-```
-
 #### b)
 
 \begin{align*} 
@@ -127,6 +119,14 @@ Comme la p-value est inférieure à 0.05, on rejète l'hypothèse $H_{0}$. On doit u
 
 \pagebreak
 # P-1
+```{r functions, echo=FALSE,include=FALSE}
+library(olsrr)
+options(scipen = 5)
+options(digits=5)
+data=read.table("weisberg56.dat",header=TRUE)
+```
+
+
 
 ###Analyse de multicolinéarité
 Avant de faire notre modèle on peut procéder à une analyse de multicolinéarité en calculant nos facteur d'inflation de la variance (VIF):
