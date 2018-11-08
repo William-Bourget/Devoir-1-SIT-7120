@@ -1,0 +1,316 @@
+---
+title: "TP1 - P2"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r intro,echo=FALSE,include=FALSE}
+setwd("C:/Users/eg60155/OneDrive - Co-operators/Desktop/ULAVAL/IA/1_STT-7120/TP1")
+data_tp2=read.table("processed.cleveland.data",header=FALSE,sep = ",")
+library(olsrr)
+library(ggplot2)
+library(car)
+library(MASS)
+library(stats)
+library(glmbb)
+library(glmnet)
+library(plotmo)  
+
+head(data_tp2)
+
+names(data_tp2) = c("age"
+                , "sex"
+                , "cp"
+                , "trestbps"
+                , "chol"
+                , "fbs"
+                , "restecg"
+                , "thalach"
+                , "exang"
+                , "oldspeak"
+                , "slope"
+                , "ca"
+                , "thal"
+                , "num")
+
+head(data_tp2)
+dim(data_tp2)
+sort(unique(data_tp2$age))
+sort(unique(data_tp2$sex)) 
+sort(unique(data_tp2$cp)) #attention, cp est une variable qualitative!
+sort(unique(data_tp2$trestbps))
+sort(unique(data_tp2$chol))
+sort(unique(data_tp2$fbs))
+sort(unique(data_tp2$restecg)) #attention, restecg est une variable qualitative
+sort(unique(data_tp2$thalach))
+sort(unique(data_tp2$exang))
+sort(unique(data_tp2$oldspeak))
+sort(unique(data_tp2$slope)) #attention, slope est une variable qualitative
+sort(unique(data_tp2$ca)) # variable avec ? comme valeur
+sort(unique(data_tp2$thal)) # variable avec ? comme valeur
+sort(unique(data_tp2$num))
+
+#Puisqu'il y a seulement 6 observations avec des valeurs manquantes, on peut les ignorer sans conséquences.
+data_tp2=data_tp2[data_tp2$ca!="?",]
+
+data_tp2=data_tp2[data_tp2$thal!="?",]
+
+#Créons une variable Y qui sera binaire, donc soit 1 ou 0.
+data_tp2$Y=ifelse(data_tp2$num>0,1,0)
+data_tp2=data_tp2[,-which(names(data_tp2)=="num")]
+```
+
+
+## Partie pratique P-2
+
+
+Il est de mise de débuter en vérifiant s'il y a de la multicolinéarité dans la matrice schéma X.
+
+
+
+```{r multicolinearite,echo=FALSE,include=TRUE}
+modele_lm_test <- lm(Y ~ age+
+                        sex+
+                        as.factor(cp)+
+                        trestbps+
+                        chol+
+                        fbs+
+                        as.factor(restecg)+
+                        thalach+
+                        exang+
+                        oldspeak+
+                        as.factor(slope)+
+                        as.numeric(ca)+
+                        as.factor(thal),
+                                          data = data_tp2)
+
+
+#regardons si nous avons présence de multicolinéarité
+ols_vif_tol(modele_lm_test) # calcul des VIF
+#il semble y avoir aucune corrélation puisque les VIF sont tous sous 10.
+```
+Alors, puisqu'aucun VIF est supérieur à 10, il n'y a pas présence de multicolinéarité entre les variables de la matrice X.
+
+
+
+On peut observer l'allure d'un modèle complet avant de commencer avec les méthodes de sélections de variables.
+```{r model complet,echo=FALSE,include=TRUE}
+modele_complet = glm(Y ~ age+
+                       sex+
+                       as.factor(cp)+
+                       trestbps+
+                       chol+
+                       fbs+
+                       as.factor(restecg)+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                     family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+summary(modele_complet)$coefficients
+```
+L'AIC du modèle complet est de `r round(summary(modele_complet)$aic,2)`.
+
+
+On peut voir que quelques variables ne semblent pas statistiquement significatives. Alors, effectuons des méthodes algorithmiques pour sélectionner les variables et afin de s'assurer que nous obtenons le modèle avec les meilleures statistiques. Pour les méthodes pas-à-pas, d'inclusion et d'exclusion, on obtient le même modèle, soit le modèle contenant les variables:
+
+ + *thal*
+ + *ca*
+ + *cp*
+ + *oldspeak*
+ + *slope*
+ + *sex*
+ + *trestbps*
+ + *exang*
+ + *thalach*
+
+```{r selection1,echo=FALSE,include=FALSE}
+modele_nul = glm(Y ~ 1,
+                  family=binomial(link=logit),data = data_tp2)
+
+
+## Sélection de variable avec forward
+model.for <- stepAIC(modele_nul,trace=FALSE,direction="forward",
+                   scope=list(upper="~ age+
+                              sex+
+                              as.factor(cp)+
+                              trestbps+
+                              chol+
+                              fbs+
+                              as.factor(restecg)+
+                              thalach+
+                              exang+
+                              oldspeak+
+                              as.factor(slope)+
+                              as.numeric(ca)+
+                              as.factor(thal)",
+                              lower="~1"),data=data_tp2)
+summary(model.for)$coefficients
+#(mieux que le modèle complet)
+  #thal
+  #ca
+  #cp
+  #oldspeak
+  #slope
+  #sex
+  #trestbps
+  #exang
+  #thalach
+
+
+model.back <- stepAIC(modele_complet,trace=FALSE,direction="backward",
+                     scope=list(upper="~ age+
+                                sex+
+                                as.factor(cp)+
+                                trestbps+
+                                chol+
+                                fbs+
+                                as.factor(restecg)+
+                                thalach+
+                                exang+
+                                oldspeak+
+                                as.factor(slope)+
+                                as.numeric(ca)+
+                                as.factor(thal)",
+                                lower="~1"),data=data_tp2)
+summary(model.back)
+#même chose que forward
+
+
+
+model.both <- stepAIC(modele_nul,trace=FALSE,direction="both",
+                      scope=list(upper="~ age+
+                                 sex+
+                                 as.factor(cp)+
+                                 trestbps+
+                                 chol+
+                                 fbs+
+                                 as.factor(restecg)+
+                                 thalach+
+                                 exang+
+                                 oldspeak+
+                                 as.factor(slope)+
+                                 as.numeric(ca)+
+                                 as.factor(thal)",
+                                 lower="~1"),data=data_tp2)
+summary(model.both)
+#pareil aux forward et backward
+
+```
+Et ce modèle nous donne un AIC de `r round(summary(model.for)$aic,2)` ce qui est mieux que le modèle complet avec un AIC de `r round(summary(modele_complet)$aic,2)`.
+
+
+
+
+```{r selection2,echo=FALSE,include=FALSE}
+modele_lasso = glmnet(x = modele_complet$x[,-1], y = modele_complet$y, family = "binomial", alpha = 1)
+plot_glmnet(modele_lasso, xvar = "lambda")
+
+set.seed(11)
+cv_out=cv.glmnet(x = modele_complet$x[, -1], y = modele_complet$y, family = "binomial", alpha = 1)
+plot(cv_out)
+best_lam = cv_out$lambda.min
+other_lam = cv_out$lambda.1se
+coef(modele_lasso, s = best_lam) #revient à enlever l'age et fbs.
+coef(modele_lasso, s = other_lam) #revient à enlever l'age, chol, fbs, trestbps, restecg
+#allons voir leur statistique AIC
+model.lasso1 = glm(Y ~ sex+
+                       as.factor(cp)+
+                       trestbps+
+                       chol+
+                       as.factor(restecg)+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                     family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+model.lasso2 = glm(Y ~ sex+
+                     as.factor(cp)+
+                     thalach+
+                     exang+
+                     oldspeak+
+                     as.factor(slope)+
+                     as.numeric(ca)+
+                     as.factor(thal),
+                   family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+summary(model.lasso1)$coefficients
+summary(model.lasso2)$coefficients
+
+
+```
+
+Par la suite, on peut poursuivre avec la méthode LASSO. Ce modèle avec le meilleur $\lambda$ revient à enlever la variable *age* et *fbs* et le modèle en prenant le meilleur $\lambda$ plus sont écart type revient à enlever les variables *age*, *trestbps*, *chol*, *fbs* et *restecg*. Pour ces 2 modèles, on obtient un AIC de `r round(summary(model.lasso1)$aic,2)` et de `r round(summary(model.lasso2)$aic,2)` respectivement, ce qui est supérieur (donc moins bon) que les modèles trouvés plus haut.
+
+
+Par ailleurs, puisque le nombre de variables dans le jeu de données nous le permet, il est possible d'essayer tous les modèles possibles.
+
+```{r tous modèles,echo=FALSE,include=FALSE}
+
+attach(data_tp2)
+modele.tous = glmbb(Y~age+
+                       sex+
+                       as.factor(cp)+
+                       trestbps+
+                       chol+
+                       fbs+
+                       as.factor(restecg)+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                  Y~1,criterion="AIC",
+                  cutoff=3,
+                  family=binomial(link=logit),data = data_tp2)
+summary(modele.tous)
+
+```
+
+On voit que, parmis tous les modèles possibles, on obtient le même modèle qu'obtenu avec les méthodes pas-à-pas, d'inclusion et d'exclusion lorsque notre critère de sélection est l'AIC.
+
+```{r final,echo=FALSE,include=TRUE}
+
+#Voici le modèle final
+model_final = glm(Y ~ sex+
+                       as.factor(cp)+
+                       trestbps+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                     family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+
+#summary(model_final)
+coef_final=as.matrix(model_final$coefficients,ncol=1)
+colnames(coef_final)="Coefficients"
+coef_final
+
+
+```
+
+Alors, les facteurs qui semblent être associés à une hausse d'un diagnostic positif de la maladie coronarienne sont:
+
+ + Être un homme
+ + La nature des douleurs à la poitrine
+      - Le fait d'avoir soit une angine atypique, une douleur non anginienne ou une douleur asymptomatique augmente la probabilité
+ + Plus la tension artérielle au repos à l'admission à l'hôpital est élevée
+ + Plus le pouls maximum atteint a une valeur réduite
+ + La présence d'angine induite par l'exercice
+ + Plus il y a une baisse dans ST induite par l'exercise par rapport au repos
+ + Une pente plate ou descendante du segment de ST lors de l'exercice maximal
+ + Plus il y a un nombre élevé de vaissaux sanguins majeurs colorés par fluroscopie
+ + Avoir un défaut réparable (lorsque *thal* vaut 7)
+ 
+ 
