@@ -1,0 +1,18 @@
+---
+title: "TP1 - Exercices Chap. 3"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1)
+Commencons par une démonstration qui sera utile à quelques endroits lors de la preuve du théorème miracle.
+Pour la démonstration il est intéressant de regarder comment chaque valeur de la matrice $(X'X)$ est calculé. Chaque élément sera dénoté $(X'X)_{ij}$
+$$ (X'X)_{kj} = (X'X)_{jk} =  \sum_{n=1}^N X_{n,j} X_{n,k}$$
+Si une donnée est retirée de la sommation, il restera donc $N-1$ donnée dans la sommation. Par exemple, si la $i^e$ donnée est enlevée de la sommation, on retrouve :
+$$ (X'X)_{kj} = (X'X)_{jk} =  \sum_{n=1}^{N-1} X_{n,j} X_{n,k} + x_{i,j} x_{i,k}$$
+$$ \sum_{n=1}^{N-1} X_{n,j} X_{n,k} + x_{i,j} x_{i,k} = (X'_{-i,}X_{-i})_{kj} + x_{ij}x_{ik}' $$
+On passe de la forme de chaque élément à la forme matricielle.
+$$ (X'X) = (X'_{-i}X_{-i}) + x_ix_i' \ \ \ , \  \ \  = (X'_{-i}X_{-i}) = (X'X) - x_ix_i'  $$
