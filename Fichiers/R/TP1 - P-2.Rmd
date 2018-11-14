@@ -55,12 +55,12 @@ sort(unique(data_tp2$ca)) # variable avec ? comme valeur
 sort(unique(data_tp2$thal)) # variable avec ? comme valeur
 sort(unique(data_tp2$num))
 
-#Puisqu'il y a seulement 6 observations avec des valeurs manquantes, on peut les ignorer sans conséquences.
+#Puisqu'il y a seulement 6 observations avec des valeurs manquantes, on peut les ignorer sans consÃ©quences.
 data_tp2=data_tp2[data_tp2$ca!="?",]
 
 data_tp2=data_tp2[data_tp2$thal!="?",]
 
-#Créons une variable Y qui sera binaire, donc soit 1 ou 0.
+#CrÃ©ons une variable Y qui sera binaire, donc soit 1 ou 0.
 data_tp2$Y=ifelse(data_tp2$num>0,1,0)
 data_tp2=data_tp2[,-which(names(data_tp2)=="num")]
 ```
@@ -69,7 +69,7 @@ data_tp2=data_tp2[,-which(names(data_tp2)=="num")]
 ## Partie pratique P-2
 
 
-Il est de mise de débuter en vérifiant s'il y a de la multicolinéarité dans la matrice schéma X.
+Il est de mise de dÃ©buter en vÃ©rifiant s'il y a de la multicolinÃ©aritÃ© dans la matrice schÃ©ma X.
 
 
 
@@ -90,15 +90,15 @@ modele_lm_test <- lm(Y ~ age+
                                           data = data_tp2)
 
 
-#regardons si nous avons présence de multicolinéarité
+#regardons si nous avons prÃ©sence de multicolinÃ©aritÃ©
 ols_vif_tol(modele_lm_test) # calcul des VIF
-#il semble y avoir aucune corrélation puisque les VIF sont tous sous 10.
+#il semble y avoir aucune corrÃ©lation puisque les VIF sont tous sous 10.
 ```
-Alors, puisqu'aucun VIF est supérieur à 10, il n'y a pas présence de multicolinéarité entre les variables de la matrice X.
+Alors, puisqu'aucun VIF est supÃ©rieur Ã  10, il n'y a pas prÃ©sence de multicolinÃ©aritÃ© entre les variables de la matrice X.
 
 
 
-On peut observer l'allure d'un modèle complet avant de commencer avec les méthodes de sélections de variables.
+On peut observer l'allure d'un modÃ¨le complet avant de commencer avec les mÃ©thodes de sÃ©lections de variables.
 ```{r model complet,echo=FALSE,include=TRUE}
 modele_complet = glm(Y ~ age+
                        sex+
@@ -116,10 +116,10 @@ modele_complet = glm(Y ~ age+
                      family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
 summary(modele_complet)$coefficients
 ```
-L'AIC du modèle complet est de `r round(summary(modele_complet)$aic,2)`.
+L'AIC du modÃ¨le complet est de `r round(summary(modele_complet)$aic,2)`.
 
 
-On peut voir que quelques variables ne semblent pas statistiquement significatives. Alors, effectuons des méthodes algorithmiques pour sélectionner les variables et afin de s'assurer que nous obtenons le modèle avec les meilleures statistiques. Pour les méthodes pas-à-pas, d'inclusion et d'exclusion, on obtient le même modèle, soit le modèle contenant les variables:
+On peut voir que quelques variables ne semblent pas statistiquement significatives. Alors, effectuons des mÃ©thodes algorithmiques pour sÃ©lectionner les variables et afin de s'assurer que nous obtenons le modÃ¨le avec les meilleures statistiques. Pour les mÃ©thodes pas-Ã -pas, d'inclusion et d'exclusion, on obtient le mÃªme modÃ¨le, soit le modÃ¨le contenant les variables:
 
  + *thal*
  + *ca*
@@ -136,7 +136,7 @@ modele_nul = glm(Y ~ 1,
                   family=binomial(link=logit),data = data_tp2)
 
 
-## Sélection de variable avec forward
+## SÃ©lection de variable avec forward
 model.for <- stepAIC(modele_nul,trace=FALSE,direction="forward",
                    scope=list(upper="~ age+
                               sex+
@@ -153,7 +153,7 @@ model.for <- stepAIC(modele_nul,trace=FALSE,direction="forward",
                               as.factor(thal)",
                               lower="~1"),data=data_tp2)
 summary(model.for)$coefficients
-#(mieux que le modèle complet)
+#(mieux que le modÃ¨le complet)
   #thal
   #ca
   #cp
@@ -181,7 +181,7 @@ model.back <- stepAIC(modele_complet,trace=FALSE,direction="backward",
                                 as.factor(thal)",
                                 lower="~1"),data=data_tp2)
 summary(model.back)
-#même chose que forward
+#mÃªme chose que forward
 
 
 
@@ -204,7 +204,7 @@ summary(model.both)
 #pareil aux forward et backward
 
 ```
-Et ce modèle nous donne un AIC de `r round(summary(model.for)$aic,2)` ce qui est mieux que le modèle complet avec un AIC de `r round(summary(modele_complet)$aic,2)`.
+Et ce modÃ¨le nous donne un AIC de `r round(summary(model.for)$aic,2)` ce qui est mieux que le modÃ¨le complet avec un AIC de `r round(summary(modele_complet)$aic,2)`.
 
 
 
@@ -218,8 +218,8 @@ cv_out=cv.glmnet(x = modele_complet$x[, -1], y = modele_complet$y, family = "bin
 plot(cv_out)
 best_lam = cv_out$lambda.min
 other_lam = cv_out$lambda.1se
-coef(modele_lasso, s = best_lam) #revient à enlever l'age et fbs.
-coef(modele_lasso, s = other_lam) #revient à enlever l'age, chol, fbs, trestbps, restecg
+coef(modele_lasso, s = best_lam) #revient Ã  enlever l'age et fbs.
+coef(modele_lasso, s = other_lam) #revient Ã  enlever l'age, chol, fbs, trestbps, restecg
 #allons voir leur statistique AIC
 model.lasso1 = glm(Y ~ sex+
                        as.factor(cp)+
@@ -248,12 +248,12 @@ summary(model.lasso2)$coefficients
 
 ```
 
-Par la suite, on peut poursuivre avec la méthode LASSO. Ce modèle avec le meilleur $\lambda$ revient à enlever la variable *age* et *fbs* et le modèle en prenant le meilleur $\lambda$ plus sont écart type revient à enlever les variables *age*, *trestbps*, *chol*, *fbs* et *restecg*. Pour ces 2 modèles, on obtient un AIC de `r round(summary(model.lasso1)$aic,2)` et de `r round(summary(model.lasso2)$aic,2)` respectivement, ce qui est supérieur (donc moins bon) que les modèles trouvés plus haut.
+Par la suite, on peut poursuivre avec la mÃ©thode LASSO. Ce modÃ¨le avec le meilleur $\lambda$ revient Ã  enlever la variable *age* et *fbs* et le modÃ¨le en prenant le meilleur $\lambda$ plus sont Ã©cart type revient Ã  enlever les variables *age*, *trestbps*, *chol*, *fbs* et *restecg*. Pour ces 2 modÃ¨les, on obtient un AIC de `r round(summary(model.lasso1)$aic,2)` et de `r round(summary(model.lasso2)$aic,2)` respectivement, ce qui est supÃ©rieur (donc moins bon) que les modÃ¨les trouvÃ©s plus haut.
 
 
-Par ailleurs, puisque le nombre de variables dans le jeu de données nous le permet, il est possible d'essayer tous les modèles possibles.
+Par ailleurs, puisque le nombre de variables dans le jeu de donnÃ©es nous le permet, il est possible d'essayer tous les modÃ¨les possibles.
 
-```{r tous modèles,echo=FALSE,include=FALSE}
+```{r tous modÃ¨les,echo=FALSE,include=FALSE}
 
 attach(data_tp2)
 modele.tous = glmbb(Y~age+
@@ -276,11 +276,11 @@ summary(modele.tous)
 
 ```
 
-On voit que, parmis tous les modèles possibles, on obtient le même modèle qu'obtenu avec les méthodes pas-à-pas, d'inclusion et d'exclusion lorsque notre critère de sélection est l'AIC.
+On voit que, parmis tous les modÃ¨les possibles, on obtient le mÃªme modÃ¨le qu'obtenu avec les mÃ©thodes pas-Ã -pas, d'inclusion et d'exclusion lorsque notre critÃ¨re de sÃ©lection est l'AIC.
 
 ```{r final,echo=FALSE,include=TRUE}
 
-#Voici le modèle final
+#Voici le modÃ¨le final
 model_final = glm(Y ~ sex+
                        as.factor(cp)+
                        trestbps+
@@ -300,17 +300,17 @@ coef_final
 
 ```
 
-Alors, les facteurs qui semblent être associés à une hausse d'un diagnostic positif de la maladie coronarienne sont:
+Alors, les facteurs qui semblent Ãªtre associÃ©s Ã  une hausse d'un diagnostic positif de la maladie coronarienne sont:
 
- + Être un homme
- + La nature des douleurs à la poitrine
-      - Le fait d'avoir soit une angine atypique, une douleur non anginienne ou une douleur asymptomatique augmente la probabilité
- + Plus la tension artérielle au repos à l'admission à l'hôpital est élevée
- + Plus le pouls maximum atteint a une valeur réduite
- + La présence d'angine induite par l'exercice
+ + ÃŠtre un homme
+ + La nature des douleurs Ã  la poitrine
+      - Le fait d'avoir soit une angine atypique, une douleur non anginienne ou une douleur asymptomatique augmente la probabilitÃ©
+ + Plus la tension artÃ©rielle au repos Ã  l'admission Ã  l'hÃ´pital est Ã©levÃ©e
+ + Plus le pouls maximum atteint a une valeur rÃ©duite
+ + La prÃ©sence d'angine induite par l'exercice
  + Plus il y a une baisse dans ST induite par l'exercise par rapport au repos
  + Une pente plate ou descendante du segment de ST lors de l'exercice maximal
- + Plus il y a un nombre élevé de vaissaux sanguins majeurs colorés par fluroscopie
- + Avoir un défaut réparable (lorsque *thal* vaut 7)
+ + Plus il y a un nombre Ã©levÃ© de vaissaux sanguins majeurs colorÃ©s par fluroscopie
+ + Avoir un dÃ©faut rÃ©parable (lorsque *thal* vaut 7)
  
  

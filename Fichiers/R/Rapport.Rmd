@@ -10,21 +10,21 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Questions Théoriques
+# Questions ThÃ©oriques
 ##T-2
 ### #2
-La fonction réciproque est la suivante: $g(u)=\frac{1}{u}$. Par conséquent, on obtient: $u_{i}=\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}$
+La fonction rÃ©ciproque est la suivante: $g(u)=\frac{1}{u}$. Par consÃ©quent, on obtient: $u_{i}=\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}$
 
 
 ####a)
-Dans le cas où $x_{i1}$ augmente de 1, on obtient que Y augmente de:
+Dans le cas oÃ¹ $x_{i1}$ augmente de 1, on obtient que Y augmente de:
 
 \begin{align*} 
 E[Y_{i};x_{i1}=x_{i1}^{*}+1]-E[Y_{i};x_{i1}=x_{i1}^{*}] &=  \frac{1}{\beta_{0}+\beta_{1}(x_{i1}+1)+x_{i2}} -\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}
 \end{align*}
 
 ####b)
-Dans le cas où $x_{i2}$ augmente de 1, on obtient que Y augmente de:
+Dans le cas oÃ¹ $x_{i2}$ augmente de 1, on obtient que Y augmente de:
 
 \begin{align*} 
 E[Y_{i};x_{i2}=x_{i2}^{*}+1]-E[Y_{i};x_{i2}=x_{i2}^{*}] &=  \frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}+1} -\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}
@@ -35,11 +35,11 @@ On calcule les intervalles de confiance de Wald pour nos $\hat{\beta_{j}}$
 \begin{align*} 
 IC(\hat{\beta_{j}},\alpha)&= \hat{\beta_{j}} \pm z_{\alpha/2} \sqrt{\hat{Var(\hat{\beta_{j}})}}\\
 IC(\hat{\beta_{0}},0.95)&= 0.1 \pm 1.96 \sqrt{0.000625} =[0.051, 0.149]\\
-IC(\hat{\beta_{1}},0.95)&= -0.01 \pm 1.96 \sqrt{0.000016} =[0.01784, -0.00216]
+IC(\hat{\beta_{1}},0.95)&= -0.01 \pm 1.96 \sqrt{0.000016} =[-0.01784, -0.00216]
 \end{align*}
 
 ####d)
-L'intervalle de confiance pour notre prédicteur linéaire $\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}}$ est $\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}} \pm z_{\alpha/2} \sqrt{v^{2}(\boldsymbol{x}_{0})}$
+L'intervalle de confiance pour notre prÃ©dicteur linÃ©aire $\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}}$ est $\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}} \pm z_{\alpha/2} \sqrt{v^{2}(\boldsymbol{x}_{0})}$
 
 
 \begin{align*} 
@@ -70,7 +70,7 @@ Selon notre fonction, on obtient:
 \end{align*}
 
 ####b) 
-On cherche la déviance. On sait que $\ell(u;Y)=\sum_{i=1}^{n} ln(\frac{1}{u_{i}})-\frac{y_{i}}{u_{i}}$
+On cherche la dÃ©viance. On sait que $\ell(u;Y)=\sum_{i=1}^{n} ln(\frac{1}{u_{i}})-\frac{y_{i}}{u_{i}}$
 
 \begin{align*} 
 D(Y,u)&=2(\ell(y;Y)-\ell(u;Y))\\
@@ -81,8 +81,8 @@ D(Y,u)&=2(\ell(y;Y)-\ell(u;Y))\\
 
 ### #5
 ####a)
-On peut exprimer $u_{i}$ de la façon suivante:
-$u_{i}=exp\left(\beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+ln(v_{i})\right)=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}$. Par conséquent, si on remplace $v_{i}$ par $v_{i}^{*}=1.05v_{i}$, on obtient:
+On peut exprimer $u_{i}$ de la faÃ§on suivante:
+$u_{i}=exp\left(\beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+ln(v_{i})\right)=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}$. Par consÃ©quent, si on remplace $v_{i}$ par $v_{i}^{*}=1.05v_{i}$, on obtient:
 
 \begin{align*} 
 u_{i}^{*}&=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}^{*}\\
@@ -99,14 +99,14 @@ u_{i}^{*}&=u_{i}e^{0.24}\\
 u_{i}^{*}&=u_{i}1.27
 \end{align*}
 
-Lorsque $x_{i1}$ augmente de une unité, alors la moyenne augmente d'environ 27% ($e^{0.24}$).
+Lorsque $x_{i1}$ augmente de une unitÃ©, alors la moyenne augmente d'environ 27% ($e^{0.24}$).
 
 #### c)
-On procède au test d'hypothèse suivant:
+On procÃ¨de au test d'hypothÃ¨se suivant:
 
-$H_{0}$: Le modèle poisson est suffisant 
+$H_{0}$: Le modÃ¨le poisson est suffisant 
 
-$H_{1}$: Le modèle binomiale négatif est nécessaire
+$H_{1}$: Le modÃ¨le binomiale nÃ©gatif est nÃ©cessaire
 
 \begin{align*} 
 \epsilon&=D_{0}-D{1}=3.8\\
@@ -115,7 +115,7 @@ p&=0.5P(\chi^{2}_{1}>\epsilon)
 &=0.02562629
 \end{align*}
 
-Comme la p-value est inférieure à 0.05, on rejète l'hypothèse $H_{0}$. On doit utiliser le modèle de la négative binomiale.
+Comme la p-value est infÃ©rieure Ã  0.05, on rejÃ¨te l'hypothÃ¨se $H_{0}$. On doit utiliser le modÃ¨le de la nÃ©gative binomiale.
 
 \pagebreak
 # P-1
@@ -128,8 +128,8 @@ data=read.table("weisberg56.dat",header=TRUE)
 
 
 
-###Analyse de multicolinéarité
-Avant de faire notre modèle on peut procéder à une analyse de multicolinéarité en calculant nos facteur d'inflation de la variance (VIF):
+###Analyse de multicolinÃ©aritÃ©
+Avant de faire notre modÃ¨le on peut procÃ©der Ã  une analyse de multicolinÃ©aritÃ© en calculant nos facteur d'inflation de la variance (VIF):
 ```{r analyse_multi_col1,echo=FALSE}
 
 
@@ -140,9 +140,9 @@ ols_coll_diag(model1)
 
 
 ```
-Avec cette analyse, on réalise qu'il a certains facteurs d'inflation de la variance supérieur à 10 (WT9 et LG9). On peut aussi observer certains indices de conditionnement qui sont calculés à partir des valeurs propres atteignent des valeurs supérieur à 30. Finalement, on constate que les variables WT9 et LG9 sont probablement en multicollinéarité, car leurs dépendances linéaires $p_{lj}$ sont supérieur à 60% pour l'indice de conditionnement le plus élevé (238.041>30). 
+Avec cette analyse, on rÃ©alise qu'il a certains facteurs d'inflation de la variance supÃ©rieur Ã  10 (WT9 et LG9). On peut aussi observer certains indices de conditionnement qui sont calculÃ©s Ã  partir des valeurs propres atteignent des valeurs supÃ©rieur Ã  30. Finalement, on constate que les variables WT9 et LG9 sont probablement en multicollinÃ©aritÃ©, car leurs dÃ©pendances linÃ©aires $p_{lj}$ sont supÃ©rieur Ã  60% pour l'indice de conditionnement le plus Ã©levÃ© (238.041>30). 
 
-Pour remédier au problème, on peut retirer la variable LG9:
+Pour remÃ©dier au problÃ¨me, on peut retirer la variable LG9:
 
 ```{r analyse_multi_col2,echo=FALSE}
 
@@ -155,10 +155,10 @@ ols_vif_tol(model2)
 
 ```
 
-On constate qu'aucun VIF n'est maintenant supérieur à 10. On peut commencer à faire notre modèle avec ces variables.
+On constate qu'aucun VIF n'est maintenant supÃ©rieur Ã  10. On peut commencer Ã  faire notre modÃ¨le avec ces variables.
 
-###Modèle
-Puisque qu'on a peu de variables dans nos données ($p'=5$), on peut se permettre de trouver tous les sous-modèles possibles pour ensuite choisir le meilleur:
+###ModÃ¨le
+Puisque qu'on a peu de variables dans nos donnÃ©es ($p'=5$), on peut se permettre de trouver tous les sous-modÃ¨les possibles pour ensuite choisir le meilleur:
 
 ```{r tous_models,echo=FALSE}
 
@@ -170,7 +170,7 @@ all_possible<- ols_step_all_possible(model)
 #as.data.frame(all_possible[all_possible$fpe== min(all_possible$fpe), ])
 
 as.data.frame(all_possible[25:31,c("mindex","predictors","rsquare","adjr","predrsq","aic")])
-print("Modèle avec meilleur R2 ajusté")
+print("ModÃ¨le avec meilleur R2 ajustÃ©")
 as.data.frame(all_possible[all_possible$adjr== max(all_possible$adjr), ])
 plot(all_possible)
 
@@ -180,23 +180,23 @@ plot(all_possible)
 ```
 
 
-À partir de ces informations, on peut voir que, basé sur la valeur du $R^{2}_{adj}$, le meilleur modèle est celui qui inclut les variables WT2, WT9, HT9 et ST9 (on laisse tomber HT2). On peut toutefois voir que le modèle complet a un meilleur $R^{2}$ que notre modèle réduit. On peut confirmer que notre modèle réduit est toutefois le meilleur, il a également le plus faible AIC (89.471) et la plus grande valeur de $R^{2}_{prev}$ (basée sur PRESS) (0.25032). Les graphiques comfirment les mêmes résultats, notre modèle réduit (#26) est le plus addéquat.
+Ã€ partir de ces informations, on peut voir que, basÃ© sur la valeur du $R^{2}_{adj}$, le meilleur modÃ¨le est celui qui inclut les variables WT2, WT9, HT9 et ST9 (on laisse tomber HT2). On peut toutefois voir que le modÃ¨le complet a un meilleur $R^{2}$ que notre modÃ¨le rÃ©duit. On peut confirmer que notre modÃ¨le rÃ©duit est toutefois le meilleur, il a Ã©galement le plus faible AIC (89.471) et la plus grande valeur de $R^{2}_{prev}$ (basÃ©e sur PRESS) (0.25032). Les graphiques comfirment les mÃªmes rÃ©sultats, notre modÃ¨le rÃ©duit (#26) est le plus addÃ©quat.
 
-On peut maintenant faire notre prédiction:
-```{r prédiction,echo=FALSE}
+On peut maintenant faire notre prÃ©diction:
+```{r prÃ©diction,echo=FALSE}
 
 
 model=lm(SOMA ~ WT2+WT9+HT9+ST9, data = data)
 vecteur_data=data.frame(WT2=13,WT9=41,HT9=141,ST9=73)
 
 
-#print("Prédiction pour E[Y]")
+#print("PrÃ©diction pour E[Y]")
 #predict(model,newdata = vecteur_data,interval=c("confidence"),level=0.95)
-print("Prédiction pour Y")
+print("PrÃ©diction pour Y")
 predict(model,newdata = vecteur_data,interval=c("prediction"),level=0.95)
 
 
 ```
 
-Avec notre modèle, on peut prédire qu'un enfant de 9 ans ayant ces caractéristiques aurait un somatotype de 6.5168 à l'âge de 18 ans. L'intervalle de confiance 95% de cette estimé ponctuel est de [3.5355, 9.4981]
+Avec notre modÃ¨le, on peut prÃ©dire qu'un enfant de 9 ans ayant ces caractÃ©ristiques aurait un somatotype de 6.5168 Ã  l'Ã¢ge de 18 ans. L'intervalle de confiance 95% de cette estimÃ© ponctuel est de [3.5355, 9.4981]
 
