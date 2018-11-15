@@ -15,4 +15,11 @@ Si une donnée est retirée de la sommation, il restera donc $N-1$ donnée dans 
 $$ (X'X)_{kj} = (X'X)_{jk} =  \sum_{n=1}^{N-1} X_{n,j} X_{n,k} + x_{i,j} x_{i,k}$$
 $$ \sum_{n=1}^{N-1} X_{n,j} X_{n,k} + x_{i,j} x_{i,k} = (X'_{-i,}X_{-i})_{kj} + x_{ij}x_{ik}' $$
 On passe de la forme de chaque élément à la forme matricielle.
-$$ (X'X) = (X'_{-i}X_{-i}) + x_ix_i' \ \ \ , \  \ \  = (X'_{-i}X_{-i}) = (X'X) - x_ix_i'  $$
+$$ (X'X) = (X'_{-i}X_{-i}) + x_ix_i' \ \ \ , \  \ \ (X'_{-i}X_{-i}) = (X'X) - x_ix_i' \  \ \ eq(3.1)  $$
+Le résultat 10 de la proposition 0.1 stipule que :
+$$ (A -vv')^{-1} = A^{-1} + \frac{A^{-1}vv'A^{-1}}{1-v'A^{-1}v} $$
+Il est possible de faire un paralèle avec les matrices de notre modèle linéaire. $A = X'X$ et $v = x_i$
+En remplacent ces matrices dans l'équations précédente, on obtient
+$$ (X'X - x_ix_i')^{-1} = (X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-x_i'(X'X)^{-1}x_i} $$
+Il est possible de remplacer le terme à gauche de l'équation par l'équation 3.1
+$$ (X'_{-i}X_{-i})^{-1} = (X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-x_i'(X'X)^{-1}x_i}  \  \ \ eq(3.2) $$
