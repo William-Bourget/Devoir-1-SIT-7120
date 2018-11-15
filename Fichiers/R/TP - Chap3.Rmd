@@ -21,5 +21,21 @@ $$ (A -vv')^{-1} = A^{-1} + \frac{A^{-1}vv'A^{-1}}{1-v'A^{-1}v} $$
 Il est possible de faire un paralèle avec les matrices de notre modèle linéaire. $A = X'X$ et $v = x_i$
 En remplacent ces matrices dans l'équations précédente, on obtient
 $$ (X'X - x_ix_i')^{-1} = (X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-x_i'(X'X)^{-1}x_i} $$
-Il est possible de remplacer le terme à gauche de l'équation par l'équation 3.1
-$$ (X'_{-i}X_{-i})^{-1} = (X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-x_i'(X'X)^{-1}x_i}  \  \ \ eq(3.2) $$
+Il est possible de remplacer le terme à gauche de l'équation par l'équation 3.1. Et $h_{ii} = x_i'(X'X)^{-1}x_i$
+$$ (X'_{-i}X_{-i})^{-1} = (X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-hii}  \  \ \ eq(3.2) $$
+Trouvons maitenant l'équation de $\hat{\beta}_{-i}$ en fonction de matrice contenant la donnée $i$ 
+$$ \hat{\beta}_{-i} =  (X'_{-i}X_{-i})^{-1} X'_{-i}Y_{-1} $$
+On peut remplacer $(X'_{-i}X_{-i})^{-1}$ par l'équation 3.2. De plus, en partant du même principe que l'équation 3.1, il est possible de prouver que $(X'_{-i}Y_{-i}) = (X'Y) - x_iy_i$. En remplacent ces deux termes dans l'équation précendente on obtient :
+$$ \hat{\beta}_{-i} = ((X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-hii})(X'Y - x_iy_i)  $$
+$$ \hat{\beta}_{-i} = (X'X)^{-1}X'Y - (X'X)^{-1}x_iy_i + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}X'Y}{1-hii} - \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}x_iy_i}{1-hii} $$
+$$ \hat{\beta}_{-i} = \hat{\beta} - (X'X)^{-1}x_iy_i +  \frac{(X'X)^{-1} x_ix_i'\hat{\beta}}{1-hii} - \frac{(X'X)^{-1} x_iy_ih_{ii}}{1-hii} $$
+$$ \hat{\beta}_{-i} = \hat{\beta} - (\frac{(X'X)^{-1}x_i}{1-h_{ii}})(y_i(1-h_{ii}) - x_i'\hat{\beta} + y_ih_{ii}) $$
+$$ \hat{\beta}_{-i} = \hat{\beta} - (\frac{(X'X)^{-1}x_i}{1-h_{ii}})(y_i - x_i'\hat{\beta})$$
+$$ \hat{\beta}_{-i} = \hat{\beta} - (\frac{(X'X)^{-1}x_i}{1-h_{ii}})(e_i)  \  \ \ eq(3.3)  $$
+On sait que :
+$$ e_{i,-i} = Y_i - x'_i\hat{\beta}_{-i} $$
+En remplacent le $\hat{\beta}_{-i}$ dans l'équation par l'équation 3.3, on obtient :
+$$ e_{i,-i} = Y_i - x'_i(\hat{\beta} - (\frac{(X'X)^{-1}x_i}{1-h_{ii}})(e_i)) $$
+$$ e_{i,-i} = Y_i - x'_i\hat{\beta} + (\frac{(x_i'X'X)^{-1}x_i}{1-h_{ii}})(e_i) $$
+$$ e_{i,-i} =e_i + \frac{h_{ii}e_i}{1-h_{ii}}$$
+$$ e_{i,-i} =\frac{e_i}{1-h_{ii}}$$
