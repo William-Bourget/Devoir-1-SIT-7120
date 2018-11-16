@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r intro,echo=FALSE,include=FALSE}
-setwd("C:/Users/eg60155/OneDrive - Co-operators/Desktop/ULAVAL/IA/1_STT-7120/TP1")
 data_tp2=read.table("processed.cleveland.data",header=FALSE,sep = ",")
 library(olsrr)
 library(ggplot2)
