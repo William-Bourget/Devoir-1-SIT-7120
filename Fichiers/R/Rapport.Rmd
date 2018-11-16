@@ -1,14 +1,19 @@
 ---
-title: "Rapport"
-output:
-  pdf_document: default
-  html_document: default
+title: "Devoir 1 STT-7120"
+author: "Étienne Bessette, Philippe Blouin-Leclerc & William Bourget "
+date: '2018-11-16'
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 2
 ---
 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+\newpage
 
 # Questions Théoriques
 ## Chapitre 1 - Exercice 1
@@ -390,7 +395,9 @@ $$ e_{i,-i} =e_i + \frac{h_{ii}e_i}{1-h_{ii}}$$
 $$ e_{i,-i} =\frac{e_i}{1-h_{ii}}$$
 
 \pagebreak
+
 # Questions Pratiques
+
 ## P1
 ```{r functions, echo=FALSE,include=FALSE}
 library(olsrr)
@@ -795,7 +802,7 @@ sort(unique(data_tp3$Gender)) # Variable Catégoriel à 2 modalités
 sort(unique(data_tp3$DrivAge)) #Variable Catégoriel à 6 modalités
 sort(unique(data_tp3$ClaimNb)) #Variable réponse de 0 à 4
 ```
-## Analyse de la multicolinéarité de la matrice shéma X
+
 Il est préférable de regarder les facteurs d'inflations de la variance avant de commencer la modélisation.
 ```{r multicolinearite_p3,echo=FALSE,include=TRUE}
 modele_complet_lm <- lm(ClaimNb ~VehValue+ VehAge + VehBody + Gender + DrivAge, data = data_tp3)
