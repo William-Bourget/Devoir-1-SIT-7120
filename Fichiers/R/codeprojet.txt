@@ -1,0 +1,346 @@
+library(olsrr)
+library(ggplot2)
+library(car)
+library(MASS)
+library(stats)
+library(glmbb)
+library(glmnet)
+library(plotmo)  
+library(xts)
+library(sp)
+library(CASdatasets)
+options(scipen = 5)
+options(digits=5)
+
+#Partie 1
+data_tp1=read.table("weisberg56.dat",header=TRUE)
+
+model1=lm(SOMA ~ WT2+HT2+WT9+HT9+LG9+ST9, data = data_tp1)
+
+ols_vif_tol(model1)
+ols_coll_diag(model1)
+
+model2=lm(SOMA ~ WT2+HT2+WT9+HT9+ST9, data = data_tp1)
+
+ols_vif_tol(model2)
+
+model=lm(SOMA ~ WT2+HT2+WT9+HT9+ST9, data = data_tp1)
+
+all_possible<- ols_step_all_possible(model)
+
+as.data.frame(all_possible[25:31,c("mindex","predictors","rsquare","adjr","predrsq","aic")])
+print("Modèle avec meilleur R2 ajusté")
+as.data.frame(all_possible[all_possible$adjr== max(all_possible$adjr), ])
+plot(all_possible)
+
+model=lm(SOMA ~ WT2+WT9+HT9+ST9, data = data_tp1)
+vecteur_data=data.frame(WT2=13,WT9=41,HT9=141,ST9=73)
+
+
+#print("Prédiction pour E[Y]")
+print("Prédiction pour Y")
+predict(model,newdata = vecteur_data,interval=c("prediction"),level=0.95)
+
+
+#Partie 2
+data_tp2=read.table("processed.cleveland.data",header=FALSE,sep = ",")
+
+head(data_tp2)
+
+names(data_tp2) = c("age"
+                , "sex"
+                , "cp"
+                , "trestbps"
+                , "chol"
+                , "fbs"
+                , "restecg"
+                , "thalach"
+                , "exang"
+                , "oldspeak"
+                , "slope"
+                , "ca"
+                , "thal"
+                , "num")
+
+head(data_tp2)
+dim(data_tp2)
+sort(unique(data_tp2$age))
+sort(unique(data_tp2$sex)) 
+sort(unique(data_tp2$cp)) #attention, cp est une variable qualitative!
+sort(unique(data_tp2$trestbps))
+sort(unique(data_tp2$chol))
+sort(unique(data_tp2$fbs))
+sort(unique(data_tp2$restecg)) #attention, restecg est une variable qualitative
+sort(unique(data_tp2$thalach))
+sort(unique(data_tp2$exang))
+sort(unique(data_tp2$oldspeak))
+sort(unique(data_tp2$slope)) #attention, slope est une variable qualitative
+sort(unique(data_tp2$ca)) # variable avec ? comme valeur
+sort(unique(data_tp2$thal)) # variable avec ? comme valeur
+sort(unique(data_tp2$num))
+
+#Puisqu'il y a seulement 6 observations avec des valeurs manquantes, on peut les ignorer sans conséquences.
+data_tp2=data_tp2[data_tp2$ca!="?",]
+
+data_tp2=data_tp2[data_tp2$thal!="?",]
+
+#Créons une variable Y qui sera binaire, donc soit 1 ou 0.
+data_tp2$Y=ifelse(data_tp2$num>0,1,0)
+data_tp2=data_tp2[,-which(names(data_tp2)=="num")]
+
+modele_lm_test <- lm(Y ~ age+
+                        sex+
+                        as.factor(cp)+
+                        trestbps+
+                        chol+
+                        fbs+
+                        as.factor(restecg)+
+                        thalach+
+                        exang+
+                        oldspeak+
+                        as.factor(slope)+
+                        as.numeric(ca)+
+                        as.factor(thal),
+                                          data = data_tp2)
+
+
+#regardons si nous avons présence de multicolinéarité
+ols_vif_tol(modele_lm_test) # calcul des VIF
+#il semble y avoir aucune corrélation puisque les VIF sont tous sous 10.
+
+modele_complet = glm(Y ~ age+
+                       sex+
+                       as.factor(cp)+
+                       trestbps+
+                       chol+
+                       fbs+
+                       as.factor(restecg)+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                     family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+summary(modele_complet)$coefficients
+
+modele_nul = glm(Y ~ 1,
+                  family=binomial(link=logit),data = data_tp2)
+
+
+## Sélection de variable avec forward
+model.for <- stepAIC(modele_nul,trace=FALSE,direction="forward",
+                   scope=list(upper="~ age+
+                              sex+
+                              as.factor(cp)+
+                              trestbps+
+                              chol+
+                              fbs+
+                              as.factor(restecg)+
+                              thalach+
+                              exang+
+                              oldspeak+
+                              as.factor(slope)+
+                              as.numeric(ca)+
+                              as.factor(thal)",
+                              lower="~1"),data=data_tp2)
+summary(model.for)$coefficients
+#(mieux que le modèle complet)
+  #thal
+  #ca
+  #cp
+  #oldspeak
+  #slope
+  #sex
+  #trestbps
+  #exang
+  #thalach
+
+
+model.back <- stepAIC(modele_complet,trace=FALSE,direction="backward",
+                     scope=list(upper="~ age+
+                                sex+
+                                as.factor(cp)+
+                                trestbps+
+                                chol+
+                                fbs+
+                                as.factor(restecg)+
+                                thalach+
+                                exang+
+                                oldspeak+
+                                as.factor(slope)+
+                                as.numeric(ca)+
+                                as.factor(thal)",
+                                lower="~1"),data=data_tp2)
+summary(model.back)
+#même chose que forward
+
+
+
+model.both <- stepAIC(modele_nul,trace=FALSE,direction="both",
+                      scope=list(upper="~ age+
+                                 sex+
+                                 as.factor(cp)+
+                                 trestbps+
+                                 chol+
+                                 fbs+
+                                 as.factor(restecg)+
+                                 thalach+
+                                 exang+
+                                 oldspeak+
+                                 as.factor(slope)+
+                                 as.numeric(ca)+
+                                 as.factor(thal)",
+                                 lower="~1"),data=data_tp2)
+summary(model.both)
+#pareil aux forward et backward
+
+modele_lasso = glmnet(x = modele_complet$x[,-1], y = modele_complet$y, family = "binomial", alpha = 1)
+plot_glmnet(modele_lasso, xvar = "lambda")
+
+set.seed(11)
+cv_out=cv.glmnet(x = modele_complet$x[, -1], y = modele_complet$y, family = "binomial", alpha = 1)
+plot(cv_out)
+best_lam = cv_out$lambda.min
+other_lam = cv_out$lambda.1se
+coef(modele_lasso, s = best_lam) #revient à enlever l'age et fbs.
+coef(modele_lasso, s = other_lam) #revient à enlever l'age, chol, fbs, trestbps, restecg
+#allons voir leur statistique AIC
+model.lasso1 = glm(Y ~ sex+
+                       as.factor(cp)+
+                       trestbps+
+                       chol+
+                       as.factor(restecg)+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                     family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+model.lasso2 = glm(Y ~ sex+
+                     as.factor(cp)+
+                     thalach+
+                     exang+
+                     oldspeak+
+                     as.factor(slope)+
+                     as.numeric(ca)+
+                     as.factor(thal),
+                   family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+summary(model.lasso1)$coefficients
+summary(model.lasso2)$coefficients
+
+attach(data_tp2)
+modele.tous = glmbb(Y~age+
+                       sex+
+                       as.factor(cp)+
+                       trestbps+
+                       chol+
+                       fbs+
+                       as.factor(restecg)+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                  Y~1,criterion="AIC",
+                  cutoff=3,
+                  family=binomial(link=logit),data = data_tp2)
+summary(modele.tous)
+
+model_final = glm(Y ~ sex+
+                       as.factor(cp)+
+                       trestbps+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                     family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+
+#summary(model_final)
+coef_final=as.matrix(model_final$coefficients,ncol=1)
+colnames(coef_final)="Coefficients"
+coef_final
+
+
+#Partie 3
+
+data(ausprivauto0405)
+data_tp3 = subset(ausprivauto0405, select = c(-ClaimOcc,-ClaimAmount))
+head(data_tp3)
+sort(unique(data_tp3$Exposure)) #entre 0 et 1
+sort(unique(data_tp3$VehValue)) # Continue entre 0 et 35.56 (En milliers de $)
+sort(unique(data_tp3$VehAge)) # Variable Catégoriel à 4 modalités
+sort(unique(data_tp3$VehBody)) # Variable Catégoriel à 13 modalités
+sort(unique(data_tp3$Gender)) # Variable Catégoriel à 2 modalités
+sort(unique(data_tp3$DrivAge)) #Variable Catégoriel à 6 modalités
+sort(unique(data_tp3$ClaimNb)) #Variable réponse de 0 à 4
+
+modele_complet_lm <- lm(ClaimNb ~VehValue+ VehAge + VehBody + Gender + DrivAge, data = data_tp3)
+ols_vif_tol(modele_complet_lm)
+
+#Fit modele complet Poisson
+modele_complet_poisson <- glm(ClaimNb ~ VehValue+ VehAge + VehBody + Gender + DrivAge, offset(Exposure),
+                         family=poisson(link=log), data = data_tp3)
+summary(modele_complet_poisson)
+
+#Fit Modele Nul Poisson
+modele_nul_poisson <- glm(ClaimNb ~ 1, offset(Exposure),
+                       family=poisson(link=log), data = data_tp3)
+summary(modele_nul_poisson)
+
+## Sélection de variable avec forward Poisson
+model_poisson_for <- stepAIC(modele_nul_poisson,trace=FALSE,direction="forward",
+                     scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                lower="~1"),data=data_tp3)
+summary(model_poisson_for)
+
+# Selection de variable avec Backward Poisson
+model_poisson_back <- stepAIC(modele_complet_poisson,trace=FALSE,direction="backward",
+                             scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                        lower="~1"),data=data_tp3)
+summary(model_poisson_back)
+
+# Selection de variable avec Both Poisson
+model_poisson_both <- stepAIC(modele_nul_poisson,trace=FALSE,direction="both",
+                             scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                        lower="~1"),data=data_tp3)
+summary(model_poisson_both)$deviance
+
+
+
+
+
+#Fit modele complet NB1
+modele_complet_NB1 <- glm.nb(ClaimNb ~ VehValue+ VehAge + VehBody + Gender + DrivAge, offset(Exposure),
+                              link=log, data = data_tp3)
+summary(modele_complet_NB1)
+
+#Fit Modele Nul NB1
+modele_nul_NB1 <- glm.nb(ClaimNb ~ 1, offset(Exposure),
+                          link=log, data = data_tp3)
+summary(modele_nul_NB1)
+
+## Sélection de variable avec forward NB1
+model_NB1_for <- stepAIC(modele_nul_NB1,trace=FALSE,direction="forward",
+                             scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                        lower="~1"),data=data_tp3)
+summary(model_NB1_for)
+
+# Selection de variable avec Backward NB1
+model_NB1_back <- stepAIC(modele_complet_NB1,trace=FALSE,direction="backward",
+                              scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                         lower="~1"),data=data_tp3)
+summary(model_NB1_back)
+
+# Selection de variable avec Both NB1
+model_NB1_both <- stepAIC(modele_nul_NB1,trace=FALSE,direction="both",
+                              scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                         lower="~1"),data=data_tp3)
+summary(model_NB1_both)
+
+rapport_vraiss = summary(model_poisson_both)$deviance - summary(model_NB1_both)$deviance
+p_value_poisson_vs_nb = 0.5*pchisq(rapport_vraiss, 1, lower.tail = FALSE)
