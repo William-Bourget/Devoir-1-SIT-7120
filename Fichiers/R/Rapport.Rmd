@@ -882,7 +882,9 @@ summary(model_NB1_both)
 
 Peut importe le modèle utilisé et la technique algorithmique utilisée, la sélection de variable est identique. Les variables qui sont utilisées sont *VehBody, DrivAge & VehAge* 
 
-À ce stade si, on a un glm avec la loi de poisson et un avec la loi binomial négative. La loi binomial négative tient compte de la surdispersion. Un test des rapports de vraissemblance peut être fait pour déterminé si l'amélioration du modèle par la loi binomial négative est significative. La déviance du modèle de poisson est de *14 839* et la déviance du modèle avec la loi binomial négative est de *13 312*. La statistique de rapport de vraissemblance est de *1 527*. La pvalue associé est de 0. Donc on rejette l'hypothèse H0, on peut supposer qu'il y a de la variabilité extra poissonienne dans nos données.  Voici le modèle finale :
+À ce stade si, on a un glm avec la loi de poisson et un avec la loi binomial négative. La loi binomial négative tient compte de la surdispersion. Un test des rapports de vraissemblance peut être fait pour déterminé si l'amélioration du modèle par la loi binomial négative est significative. La déviance du modèle de poisson est de *14 839* et la déviance du modèle avec la loi binomial négative est de *13 312*. La statistique de rapport de vraissemblance est de *1 527*. La pvalue associé est de 0. Donc on rejette l'hypothèse H0, on peut supposer qu'il y a de la variabilité extra poissonienne dans nos données.
+
+Les variables du modèles finales sont *VehBody, DrivAge & VehAge*. Le modèle est un glm avec la loi binomial négative avec le lien log. Le paramètre du surdispersion est de 1.6951. Il y a un terme d'offset qui est l'exposure. Voici le modèle finale :
 ```{r modèles_final_p3,echo=FALSE,include=TRUE}
 summary(model_NB1_both)
 ```
