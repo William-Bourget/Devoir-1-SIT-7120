@@ -31,3 +31,87 @@ sort(unique(data_tp3$DrivAge)) #Variable Catégoriel à 6 modalités
 sort(unique(data_tp3$ClaimNb)) #Variable réponse de 0 à 4
 ```
 ## Analyse de la multicolinéarité de la matrice shéma X
+Il est préférable de regarder les facteurs d'inflations de la variance avant de commencer la modélisation.
+```{r multicolinearite,echo=FALSE,include=TRUE}
+modele_complet_lm <- lm(ClaimNb ~VehValue+ VehAge + VehBody + Gender + DrivAge, data = data_tp3)
+ols_vif_tol(modele_complet_lm)
+```
+Il y a des variables avec un VIF plus grand que 10. Normalement il serait utile de retirer certaines variables. Par contre, se sont seulement des catégories d'une variable qui sont affectées. Lorsqu'il y a une variable catégorielle avec *n* catégories dans le modèle, il y a *n-1* variables qui sont créées, qui sont des indicateurs 0,1 selon la catégorie représentée par la variable. Donc il est normal que ces variable souffrent de multicolinéarité. Ce n'est pas un problème, donc on garde tous les variables pour la modélisation.
+
+Pour chaque modèle qui sera testé il y aura un terme d'offset. Celui ci est l'exposure, c'est à dire la proportion de l'année que l'assuré est couvert. L'espérence de son nombre d'accident sera ainsi proportionel à la proportion de l'année couvert par l'assuré. La méthodologie sera la suivante: 
+
+1. Faire un glm avec la loi de poisson et un lien log. Ajuster le meilleur modèle en utilisant des techniques algorithmiques tel que le foward, backward et la combinaison des deux.
+
+2. Faire un glm avec la loi de binomial négative et un lien log pour tenir compte de la surdispersion. Ajuster le meilleur modèle en utilisant des techniques algorithmiques tel que le foward, backward et la combinaison des deux.
+
+3. Faire un glm avec la loi poisson et binomial négative pour les variables trouvées retenues en 1 et 2. Pour chaque combinaison, faire un test de rapport de vraissemblance pour voir si le modèle poisson est correct ou si on doit prendre le modèle avec la loi binomial négative.
+
+```{r tous modèles,echo=FALSE,include=FALSE}
+#Fit modele complet Poisson
+modele_complet_poisson <- glm(ClaimNb ~ VehValue+ VehAge + VehBody + Gender + DrivAge, offset(Exposure),
+                         family=poisson(link=log), data = data_tp3)
+summary(modele_complet_poisson)
+
+#Fit Modele Nul Poisson
+modele_nul_poisson <- glm(ClaimNb ~ 1, offset(Exposure),
+                       family=poisson(link=log), data = data_tp3)
+summary(modele_nul_poisson)
+
+## Sélection de variable avec forward Poisson
+model_poisson_for <- stepAIC(modele_nul_poisson,trace=FALSE,direction="forward",
+                     scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                lower="~1"),data=data_tp3)
+summary(model_poisson_for)
+
+# Selection de variable avec Backward Poisson
+model_poisson_back <- stepAIC(modele_complet_poisson,trace=FALSE,direction="backward",
+                             scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                        lower="~1"),data=data_tp3)
+summary(model_poisson_back)
+
+# Selection de variable avec Both Poisson
+model_poisson_both <- stepAIC(modele_nul_poisson,trace=FALSE,direction="both",
+                             scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                        lower="~1"),data=data_tp3)
+summary(model_poisson_both)$deviance
+
+
+
+
+
+#Fit modele complet NB1
+modele_complet_NB1 <- glm.nb(ClaimNb ~ VehValue+ VehAge + VehBody + Gender + DrivAge, offset(Exposure),
+                              link=log, data = data_tp3)
+summary(modele_complet_NB1)
+
+#Fit Modele Nul NB1
+modele_nul_NB1 <- glm.nb(ClaimNb ~ 1, offset(Exposure),
+                          link=log, data = data_tp3)
+summary(modele_nul_NB1)
+
+## Sélection de variable avec forward NB1
+model_NB1_for <- stepAIC(modele_nul_NB1,trace=FALSE,direction="forward",
+                             scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                        lower="~1"),data=data_tp3)
+summary(model_NB1_for)
+
+# Selection de variable avec Backward NB1
+model_NB1_back <- stepAIC(modele_complet_NB1,trace=FALSE,direction="backward",
+                              scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                         lower="~1"),data=data_tp3)
+summary(model_NB1_back)
+
+# Selection de variable avec Both NB1
+model_NB1_both <- stepAIC(modele_nul_NB1,trace=FALSE,direction="both",
+                              scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                         lower="~1"),data=data_tp3)
+summary(model_NB1_both)
+```
+
+Peut importe le modèle utilisé et la technique algorithmique utilisée, la sélection de variable est identique. Les variables qui sont utilisées sont *VehBody, DrivAge & VehAge* 
+
+À ce stade si, on a un glm avec la loi de poisson et un avec la loi binomial négative. La loi binomial négative tient compte de la surdispersion. Un test des rapports de vraissemblance peut être fait pour déterminé si l'amélioration du modèle par la loi binomial négative est significative. La déviance du modèle de poisson est de *14 839* et la déviance du modèle avec la loi binomial négative est de *13 312*. La statistique de rapport de vraissemblance est de *1 527*. La pvalue associé est de 0. Donc on rejette l'hypothèse H0, on peut supposer qu'il y a de la variabilité extra poissonienne dans nos données.  Voici le modèle finale :
+```{r modèles_final,echo=FALSE,include=TRUE}
+summary(model_NB1_both)
+```
+La valeur relative du véhicule n'est pas associée au nombre de réclamations esperés. La relation entre la fréquence de sinistre et la valeur du véhicule ne fait pas beaucoup de sens. La valeur du véhicule serait plus associée à la sévérité des sinistres qu'a la fréquence. 
