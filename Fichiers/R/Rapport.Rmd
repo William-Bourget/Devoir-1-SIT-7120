@@ -4,7 +4,7 @@ author: "Étienne Bessette, Philippe Blouin-Leclerc & William Bourget "
 date: '2018-11-16'
 output: 
   pdf_document:
-    toc: true
+    toc: false
     toc_depth: 2
 ---
 
@@ -78,7 +78,7 @@ Nous obtenons que l'intervalle au même niveau de confiance pour $b_1$ étant $(
 
 
 
-### d) Soit $t_1$, la statistique t qui permet de tester l'hypothèse $H_0 : \beta_1 = \beta_{1,0}$. Montrez que la statistique t pour le test $H_0 : b_1 = b_{1,0}$ , où $b_{1,0} = \frac{c1\beta_{1,0}}{c_2}$, sera égale à $t_1$.
+### d) Soit $t_1$, la statistique t qui permet de tester l'hypothèse $H_0 : \beta_1 = \beta_{1,0}$. Montrez que la statistique t pour le test $H_0 : b_1 = b_{1,0}$ , où $b_{1,0} = \frac{c_1\beta_{1,0}}{c_2}$, sera égale à $t_1$.
 
 
 \begin{align*}
@@ -122,7 +122,7 @@ F &= \frac{(2850 - (23) (\frac{207}{23})^2 - 7.81 (23-4)) / 3}{7.81} = 35.79 \\
 
 Alors, on a que
 $$Pr[F_{3,19} \geq 35.79] \approx 0$$
-Donc on rejete l'hypothèse nulle qu'il n'y a aucun des coefficients qui explique la qualité des stylos. On conclut que les données montrent de l'évidence qu'au moins une des 3 variables exogènes explique une partie de la variable endogène.
+Donc on rejete l'hypothèse nulle qu'il n'y a aucun des coefficients qui explique la qualité des stylos. On conclut que les données montrent de l'évidence qu'au moins une des 3 variables exogènes expliquent une partie de la variable endogène.
 
 
 
@@ -220,7 +220,7 @@ H_1&: \beta_2 \neq \beta_3 \neq 0 \\
 ###c)
 Nous voulons alors tester si
 
-$$E[Y|x^{*}_i = 1.25x_i,, m_{iA} = 0, m_{iB} = 0] = E[Y|x^{*}_i = x_i,, m_{iA} = 0, m_{iB} = 1]$$
+$$E[Y|x^{*}_i = 1.25x_i,, m_{iA} = 0, m_{iB} = 0] = E[Y|x^{*}_i = x_i, m_{iA} = 0, m_{iB} = 1]$$
 $$\beta_0 + \beta_11.25x_i = \beta_0 + \beta_1x_i + \beta_B + \beta_3x_i$$
 ce qui revient à tester simultanément les 2 conditions suivantes en fonction des termes des coefficients du modèle:
 $$ H_0: \beta_B = 0, \ \ \ 0.25\beta_1 = \beta_3$$
@@ -298,7 +298,7 @@ Selon notre fonction, on obtient:
 
 
 \begin{align*} 
-\ell(\beta_{0},\beta_{1};Y)&=\sum_{i=1}^{n} ln(f(y_{i}|x_{i};\beta_{0},\beta_{1})) \\
+\ell(\beta_{0},\beta_{1};y)&=\sum_{i=1}^{n} ln(f(y_{i}|x_{i};\beta_{0},\beta_{1})) \\
 &=\sum_{i=1}^{n} ln(\frac{1}{u_{i}}e^{-\frac{y_{i}}{u_{i}}})\\
 &=\sum_{i=1}^{n} ln(\frac{1}{u_{i}})-\frac{y_{i}}{u_{i}} \\
 &=\sum_{i=1}^{n} ln(\beta_{0}+\beta_{1}x_{i})-y_{i}(\beta_{0}+\beta_{1}x_{i})  \\
@@ -308,8 +308,8 @@ Selon notre fonction, on obtient:
 On cherche la déviance. On sait que $\ell(u;Y)=\sum_{i=1}^{n} ln(\frac{1}{u_{i}})-\frac{y_{i}}{u_{i}}$
 
 \begin{align*} 
-D(Y,u)&=2(\ell(y;Y)-\ell(u;Y))\\
-&=2(\ell(y;Y)-\ell(g^{-1}(\beta_{0}+\beta_{1}x_{i};Y))\\
+D(Y,u)&=2(\ell(y;y)-\ell(u;y))\\
+&=2(\ell(y;y)-\ell(g^{-1}(\beta_{0}+\beta_{1}x_{i};y))\\
 &=2\left(\sum_{i=1}^{n} ln(\frac{1}{y_{i}})-\frac{y_{i}}{y_{i}}-\sum_{i=1}^{n} ln(\beta_{0}+\beta_{1}x_{i})-y_{i}(\beta_{0}+\beta_{1}x_{i})\right)\\
 &=2\left(\sum_{i=1}^{n} ln(\frac{1}{y_{i}})-1-ln(\beta_{0}+\beta_{1}x_{i})+y_{i}(\beta_{0}+\beta_{1}x_{i})\right)
 \end{align*}
@@ -372,7 +372,7 @@ Il est possible de remplacer le terme à gauche de l'équation par l'équation 3
 $$ (X'_{-i}X_{-i})^{-1} = (X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-hii}  \  \ \ eq(3.2) $$
 Trouvons maitenant l'équation de $\hat{\beta}_{-i}$ en fonction de matrice contenant la donnée $i$ 
 $$ \hat{\beta}_{-i} =  (X'_{-i}X_{-i})^{-1} X'_{-i}Y_{-1} $$
-On peut remplacer $(X'_{-i}X_{-i})^{-1}$ par l'équation 3.2. De plus, en partant du même principe que l'équation 3.1, il est possible de prouver que $(X'_{-i}Y_{-i}) = (X'Y) - x_iy_i$. En remplacent ces deux termes dans l'équation précendente on obtient :
+On peut remplacer $(X'_{-i}X_{-i})^{-1}$ par l'équation 3.2. De plus, en partant du même principe que l'équation 3.1, il est possible de prouver que $(X'_{-i}Y_{-i}) = (X'Y) - x_iy_i$. En remplacent ces deux termes dans l'équation précédente on obtient :
 $$ \hat{\beta}_{-i} = ((X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-hii})(X'Y - x_iy_i)  $$
 $$ \hat{\beta}_{-i} = (X'X)^{-1}X'Y - (X'X)^{-1}x_iy_i + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}X'Y}{1-hii} - \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}x_iy_i}{1-hii} $$
 $$ \hat{\beta}_{-i} = \hat{\beta} - (X'X)^{-1}x_iy_i +  \frac{(X'X)^{-1} x_ix_i'\hat{\beta}}{1-hii} - \frac{(X'X)^{-1} x_iy_ih_{ii}}{1-hii} $$
@@ -470,7 +470,7 @@ plot(all_possible)
 ```
 
 
-À partir de ces informations, on peut voir que, basé sur la valeur du $R^{2}_{adj}$, le meilleur modèle est celui qui inclut les variables WT2, WT9, HT9 et ST9 (on laisse tomber HT2). On peut toutefois voir que le modèle complet a un meilleur $R^{2}$ que notre modèle réduit. On peut confirmer que notre modèle réduit est toutefois le meilleur, il a également le plus faible AIC (89.471) et la plus grande valeur de $R^{2}_{prev}$ (basée sur PRESS) (0.25032). Les graphiques comfirment les mêmes résultats, notre modèle réduit (#26) est le plus addéquat.
+À partir de ces informations, on peut voir que, basé sur la valeur du $R^{2}_{adj}$, le meilleur modèle est celui qui inclut les variables WT2, WT9, HT9 et ST9 (on laisse tomber HT2). On peut toutefois voir que le modèle complet a un meilleur $R^{2}$ que notre modèle réduit. On peut confirmer que notre modèle réduit est toutefois le meilleur, il a également le plus faible AIC (89.471) et la plus grande valeur de $R^{2}_{prev}$ (basée sur PRESS) (0.25032). Les graphiques comfirment les mêmes résultats, notre modèle réduit (#26) est le plus adéquat.
 
 On peut maintenant faire notre prédiction:
 ```{r prédiction_p1,echo=FALSE}
@@ -808,9 +808,9 @@ Il est préférable de regarder les facteurs d'inflations de la variance avant d
 modele_complet_lm <- lm(ClaimNb ~VehValue+ VehAge + VehBody + Gender + DrivAge, data = data_tp3)
 ols_vif_tol(modele_complet_lm)
 ```
-Il y a des variables avec un VIF plus grand que 10. Normalement il serait utile de retirer certaines variables. Par contre, se sont seulement des catégories d'une variable qui sont affectées. Lorsqu'il y a une variable catégorielle avec *n* catégories dans le modèle, il y a *n-1* variables qui sont créées, qui sont des indicateurs 0,1 selon la catégorie représentée par la variable. Donc il est normal que ces variable souffrent de multicolinéarité. Ce n'est pas un problème, donc on garde tous les variables pour la modélisation.
+Il y a des variables avec un VIF plus grand que 10. Normalement il serait utile de retirer certaines variables. Par contre, ce sont seulement des catégories d'une variable qui sont affectées. Lorsqu'il y a une variable catégorielle avec *n* catégories dans le modèle, il y a *n-1* variables qui sont créées, qui sont des indicateurs 0,1 selon la catégorie représentée par la variable. Donc il est normal que ces variable souffrent de multicolinéarité. Ce n'est pas un problème, donc on garde tous les variables pour la modélisation.
 
-Pour chaque modèle qui sera testé il y aura un terme d'offset. Celui ci est l'exposure, c'est à dire la proportion de l'année que l'assuré est couvert. L'espérence de son nombre d'accident sera ainsi proportionel à la proportion de l'année couvert par l'assuré. La méthodologie sera la suivante: 
+Pour chaque modèle qui sera testé il y aura un terme d'offset. Celui-ci est l'exposure, c'est à dire la proportion de l'année que l'assuré est couvert. L'espérence de son nombre d'accident sera ainsi proportionel à la proportion de l'année couvert par l'assuré. La méthodologie sera la suivante: 
 
 1. Faire un glm avec la loi de poisson et un lien log. Ajuster le meilleur modèle en utilisant des techniques algorithmiques tel que le foward, backward et la combinaison des deux.
 
@@ -880,12 +880,12 @@ model_NB1_both <- stepAIC(modele_nul_NB1,trace=FALSE,direction="both",
 summary(model_NB1_both)
 ```
 
-Peut importe le modèle utilisé et la technique algorithmique utilisée, la sélection de variable est identique. Les variables qui sont utilisées sont *VehBody, DrivAge & VehAge* 
+Peu importe le modèle utilisé et la technique algorithmique utilisée, la sélection de variable est identique. Les variables qui sont utilisées sont *VehBody, DrivAge & VehAge* 
 
-À ce stade si, on a un glm avec la loi de poisson et un avec la loi binomial négative. La loi binomial négative tient compte de la surdispersion. Un test des rapports de vraissemblance peut être fait pour déterminé si l'amélioration du modèle par la loi binomial négative est significative. La déviance du modèle de poisson est de *14 839* et la déviance du modèle avec la loi binomial négative est de *13 312*. La statistique de rapport de vraissemblance est de *1 527*. La pvalue associé est de 0. Donc on rejette l'hypothèse H0, on peut supposer qu'il y a de la variabilité extra poissonienne dans nos données.
+À ce stade ci, on a un glm avec la loi de poisson et un avec la loi binomial négative. La loi binomial négative tient compte de la surdispersion. Un test des rapports de vraissemblance peut être fait pour déterminer si l'amélioration du modèle par la loi binomial négative est significative. La déviance du modèle de poisson est de *14 839* et la déviance du modèle avec la loi binomial négative est de *13 312*. La statistique de rapport de vraissemblance est de *1 527*. La pvalue associé est de 0. Donc on rejette l'hypothèse H0, on peut supposer qu'il y a de la variabilité extra poissonienne dans nos données.
 
 Les variables du modèles finales sont *VehBody, DrivAge & VehAge*. Le modèle est un glm avec la loi binomial négative avec le lien log. Le paramètre du surdispersion est de 1.6951. Il y a un terme d'offset qui est l'exposure. Voici le modèle finale :
 ```{r modèles_final_p3,echo=FALSE,include=TRUE}
 summary(model_NB1_both)
 ```
-La valeur relative du véhicule n'est pas associée au nombre de réclamations esperés. La relation entre la fréquence de sinistre et la valeur du véhicule ne fait pas beaucoup de sens. La valeur du véhicule serait plus associée à la sévérité des sinistres qu'a la fréquence. 
+La valeur relative du véhicule n'est pas associée au nombre de réclamations esperées. La relation entre la fréquence de sinistre et la valeur du véhicule ne fait pas beaucoup de sens. La valeur du véhicule serait plus associée à la sévérité des sinistres qu'à la fréquence. 
