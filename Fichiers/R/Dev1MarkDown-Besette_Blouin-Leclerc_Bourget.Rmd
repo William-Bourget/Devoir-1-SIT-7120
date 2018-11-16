@@ -1,0 +1,891 @@
+---
+title: "Devoir 1 STT-7120"
+author: "Étienne Bessette, Philippe Blouin-Leclerc & William Bourget "
+date: '2018-11-16'
+output: 
+  pdf_document:
+    toc: false
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\newpage
+
+# Questions Théoriques
+## Chapitre 1 - Exercice 1
+
+### a) Montrez que $\hat{b}_1 = \frac{c_1 \hat{\beta}_1}{c_2}$
+
+Avec l'équation donnée dans l'exercice, on remarque facilement qu'il s'agit d'une régression linéaire de la forme $Y_i = \beta_{0} + \beta_{1}x_i + \epsilon_i$ où le $\beta_{0}^{*} = \beta_{0} + \beta_{1} \overline{x}_n$ ce qui résulte à l'équation donnée de l'exercice.
+Alors, puisque le $\beta_1$ demeure inchangé, il est possible de partir de l'équation 1.17 du manuel de cours, où on obtient que la valeur $\hat{\beta}_1$ peut être définie comme suit:
+$$ \hat{\beta}_1 = \frac{\sum_{i=1}^{n} Y_i (x_i-\overline{x}_n)}{\sum_{i=1}^{n}(x_i-\overline{x}_n)^2}$$
+Alors, pour l'estimateur de $\hat{b}_1$, nous obtenons ceci:
+
+\begin{align*}
+\hat{b}_1 &= \frac{\sum_{i=1}^{n} \widetilde{Y}_i (\widetilde{x}_i-\overline{\widetilde{x}}_n)}{\sum_{i=1}^{n}(\widetilde{x}_i-\overline{\widetilde{x}}_n)^2} \\
+          &= \frac{\sum_{i=1}^{n} c_1 Y_i (x_i-\overline{x}_n) c_2}{\sum_{i=1}^{n}(x_i-\overline{x}_n)^2 c_2^2} \\
+          &= \frac{c_1}{c_2} \frac{\sum_{i=1}^{n} Y_i (x_i-\overline{x}_n)}{\sum_{i=1}^{n}(x_i-\overline{x}_n)^2} \\
+          &= \frac{c_1}{c_2} \hat{\beta}_1\\
+\end{align*}
+
+
+### b) Montrez que $\widetilde{\sigma}^2 = Var(\widetilde{Y}_i) = c_{1}^2 \sigma^2$ et donc que $\widetilde{s}^2 = c_{1}^2 s_2$ est un estimateur non biaisé de $\widetilde{\sigma}^2$.
+
+\begin{align*}
+Var(\widetilde{Y}_i) &= Var(c_1 Y_i) \\
+                    &= c_{1}^2 Var(Y_i) \\
+                    &= c_{1}^2 \sigma^2 \\
+\end{align*}
+Alors, on a que
+\begin{align*}
+\widetilde{s}^2 &= \frac{\sum_{i=1}^{n}(\widetilde{Y}_i - \hat{\widetilde{Y}}_i)^2}{n-p} \\
+\widetilde{s}^2 &= \frac{\sum_{i=1}^{n}(c_1 Y_i - (\hat{b}_0 + \hat{b}_1 (\widetilde{x}_i - \overline{\widetilde{x}}_n)))^2}{n-p} \\
+\end{align*}
+
+
+En utilisant le fait que $\hat{b}_1 = \frac{c_1 \hat{\beta}_1}{c_2}$ et $\hat{b}_0 = c_1 \hat{\beta}_0$, on remplace dans l'équation pour obtenir:
+
+
+\begin{align*}
+\widetilde{s}^2 &= \frac{\sum_{i=1}^{n}(c_1 Y_i - (c_1 \hat{\beta}_0 + \frac{c_1 \hat{\beta}_1}{c_2} (\widetilde{x}_i - \overline{\widetilde{x}}_n)))^2}{n-p} \\
+                &= \frac{\sum_{i=1}^{n}(c_1 Y_i - (c_1 \hat{\beta}_0 + \frac{c_1 \hat{\beta}_1}{c_2} (x_i - \overline{x}_n) c_2 ))^2}{n-p} \\
+                &= c_{1}^2 \frac{\sum_{i=1}^{n}(Y_i - (\hat{\beta}_0 + \hat{\beta}_1(x_i - \overline{x}_n)))^2}{n-p} \\
+                &= c_{1}^2 \frac{\sum_{i=1}^{n}(Y_i - \hat{Y}_i)^2}{n-p} \\
+                &= c_{1}^2 s^2 \\
+\end{align*}
+
+
+
+
+### c) Montrez que si $(\hat{\beta}_{1L}, \hat{\beta}_{1U})$ est un intervalle de confiance à 95% pour $\beta_1$, montrez que $(\frac{c_1}{c_2}\hat{\beta}_{1L}, \frac{c_1}{c_2}\hat{\beta}_{1U})$ est un intervalle de confiance à 95% pour $b_1$.
+
+
+\begin{align*}
+    &Pr \bigg(\hat{b}_1 - t_{\frac{\alpha}{2};n-p} \sqrt{\widetilde{s}^2 (\widetilde{X}'\widetilde{X})^{-1}} \leq b_1 \leq \hat{b}_1 - t_{\frac{\alpha}{2};n-p} \sqrt{\widetilde{s}^2 (\widetilde{X}'\widetilde{X})^{-1}} \bigg) \\
+    &= Pr \bigg(\frac{c_1}{c_2}\hat{\beta}_1 - t_{\frac{\alpha}{2};n-p} \sqrt{\frac{c_1^2}{c_2^2}s^2 (X'X)^{-1}} \leq b_1 \leq \frac{c_1}{c_2}\hat{\beta}_1 - t_{\frac{\alpha}{2};n-p} \sqrt{\frac{c_1^2}{c_2^2}s^2 (X'X)^{-1}} \bigg) \\
+    &= Pr \Bigg(\frac{c_1}{c_2} \bigg(\hat{\beta}_1 - t_{\frac{\alpha}{2};n-p} \sqrt{s^2 (X'X)^{-1}}\bigg) \leq b_1 \leq \frac{c_1}{c_2} \bigg(\hat{\beta}_1 + t_{\frac{\alpha}{2};n-p} \sqrt{s^2 (X'X)^{-1}}\bigg) \Bigg)\\
+    &= Pr \Bigg(\frac{c_1}{c_2} \hat{\beta}_{1L} \leq b_1 \leq \frac{c_1}{c_2} \hat{\beta}_{1U}  \Bigg) \\
+\end{align*}
+
+
+Alors, puisque nous avons que l'intervalle de confiance à 95% de $\beta_1$ est la suivante:
+$$ 0.95 = Pr \bigg(\hat{\beta}_1 - t_{\frac{0.05}{2};n-p} \sqrt{s^2 (X'X)^{-1}} \leq \beta_1 \leq \hat{\beta}_1 - t_{\frac{0.05}{2};n-p} \sqrt{s^2 (X'X)^{-1}} \bigg) $$
+Nous obtenons que l'intervalle au même niveau de confiance pour $b_1$ étant $(\frac{c_1}{c_2}\hat{\beta}_{1L}, \frac{c_1}{c_2}\hat{\beta}_{1U})$.
+
+
+
+### d) Soit $t_1$, la statistique t qui permet de tester l'hypothèse $H_0 : \beta_1 = \beta_{1,0}$. Montrez que la statistique t pour le test $H_0 : b_1 = b_{1,0}$ , où $b_{1,0} = \frac{c_1\beta_{1,0}}{c_2}$, sera égale à $t_1$.
+
+
+\begin{align*}
+t &= \frac{\hat{b}_1 - b_{1,0}}{se(\hat{b}_1)} \\
+t &= \frac{\frac{c_1 \hat{\beta}_{1,0}}{c_2} - \frac{c_1 \beta_{1,0}}{c_2}}{\sqrt{\widetilde{s}^2 (\widetilde{X}'\widetilde{X})^{-1}}} \\
+t &= \frac{\frac{c_1 \hat{\beta}_{1,0}}{c_2} - \frac{c_1 \beta_{1,0}}{c_2}}{\sqrt{\frac{c_1^2}{c_2^2}s^2 (X'X)^{-1}}} \\
+t &= \frac{\frac{c_1}{c_2} \hat{\beta}_{1,0} - \frac{c_1}{c_2} \beta_{1,0}}{\frac{c_1}{c_2}\sqrt{s^2 (X'X)^{-1}}} \\
+t &= \frac{\hat{\beta}_{1,0} - \beta_{1,0}}{\sqrt{s^2 (X'X)^{-1}}} \\
+t &= t_1 \\
+\end{align*}
+
+
+### e) À la lumière des résultats obtenus en (a)-(d), que pouvez-vous dire quant au choix des unités de mesure pour la variable endogène et la variable exogène ?
+
+Comme il est possible de le constater, un changement d'unité de mesure impacte les valeurs des estimations des coefficients de régression. Alors, lors d'un interprétation des coefficients, il est bien important de considérer l'unité de mesure sélectionnée. Par contre, il est possible de voir au numéro (d) que les unités de mesure n'impacteront pas les tests d'hypothèses et en analysant les résultats, il sera possible de rejeter ou non l'hypothèse nulle avec le même niveau de confiance. Alors, dans tous les cas, lorsqu'il y a un changement d'unité de mesure, la régression linéaire s'ajustera en conséquence et nous obtiendrons les mêmes conclusions.
+
+
+
+
+## Chapitre 1 - Exercice 10
+
+### a)
+Afin de répondre à la question de l'ingénieur, il est possible de faire un test F de l'importance globale de la régression. Ceci revient donc à tester
+
+$$H_0: \beta_1 = \beta_2 = \beta_3 = 0$$
+\begin{center}
+$H_1:$ au moins un des coefficients n'est pas 0.
+\end{center}
+
+où ceci revient à prendre la statistique F de la table ANOVA et de rejeter $H_0$ lorsque celle-ci prend de grande valeur.
+
+
+\begin{align*}
+F &= \frac{SS_{Reg} / p^{'}}{s^2} \\
+F &= \frac{(SS_{TOT} - SS_{Res}) / p^{'}}{s^2} \\
+F &= \frac{(SS_{TOT} - s^2 (n-p)) / p^{'}}{s^2} \\
+F &= \frac{(\sum_{i=1}^{23} Y_i^2 - n \overline{Y_n}^2 - s^2 (n-p)) / p^{'}}{s^2}\\
+F &= \frac{(2850 - (23) (\frac{207}{23})^2 - 7.81 (23-4)) / 3}{7.81} = 35.79 \\
+\end{align*}
+
+
+Alors, on a que
+$$Pr[F_{3,19} \geq 35.79] \approx 0$$
+Donc on rejete l'hypothèse nulle qu'il n'y a aucun des coefficients qui explique la qualité des stylos. On conclut que les données montrent de l'évidence qu'au moins une des 3 variables exogènes expliquent une partie de la variable endogène.
+
+
+
+###b)
+$$E[Y | x_1^{*} = x_1 -1] - E[Y | x_1^{*} = x_1] = E[Y | x_2^{*} = x_2 +1] - E[Y | x_2^{*} = x_2]$$
+$$\beta_0 + \beta_1(x_1 - 1) + \beta_2 x_2 + \beta_3 x_3 - (\beta_0 + \beta_1x_1 + \beta_2 x_2 + \beta_3 x_3) = \beta_0 + \beta_1x_1 + \beta_2 (x_2+1) + \beta_3 x_3 - (\beta_0 + \beta_1x_1 + \beta_2 x_2 + \beta_3 x_3)$$
+
+Ceci revient à tester l'hypothèse suivante
+$$ -\beta_1 = \beta_2 $$
+Alors, on peut substituer $\beta_2$ par $-\beta1$ dans l'équation du modèle complet pour obtenir notre hypothèse nulle.
+$$Y = \beta_0 + \beta_1x_1 - \beta_1 x_2 + \beta_3 x_3 + \epsilon$$
+$$Y = \beta_0 + \beta_1 (x_1 - x_2) + \beta_3 x_3 + \epsilon$$
+
+Donc nous pouvons tester l'hypothèse nulle selon le principe de somme de carrés résiduelle additionnelle
+
+$$H_0: Y_i = \beta_0 + \beta_1 (x_{i1} - x_{i2}) + \beta_3 x_{i3} + \epsilon_i$$
+$$H_1: Y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3} + \epsilon_i$$
+
+ce qui revient à comparer l'énoncé (v) de l'exercice contre l'énoncé (i) et nous rejeterons l'hypothèse nulle si la valeur de la statistique F suivante prendra une grande valeur
+
+\begin{align*}
+F &= \frac{SS_{Res}^{H_0} - SS_{Res}^{H_1}}{\Delta_{dl} s_{H_1}^2} \\
+F &= \frac{s_{H_0}^2 (23-3) - s_{H_1}^2 (23-4)}{1 * s_{H_1}^2} \\
+F &= \frac{8.12 (23-3) - 7.81 (23-4)}{1 * 7.81} = 1.7939 \\
+\end{align*}
+
+On obtient ensuite que
+$$ Pr[F_{1,23-4} \geq 1.7939] = 0.1963$$
+Nous obtenons que les données ne montrent pas d'évidence afin de pouvoir rejeter l'hypothèse nulle.
+
+
+###c)
+Ceci revient à tester l'hypothèse suivante:
+\begin{align*}
+H_0: \beta_3 = 0 \ \ &\Rightarrow  Y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \epsilon_i \\
+H_1: \beta_3 \neq 0 \ \ &\Rightarrow  Y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3} + \epsilon_i \\
+\end{align*}
+
+Et il est possible de faire le test en utilisant le principe de somme de carrés résiduelle additionnelle. On compare alors l'équation (iv) à l'équation (i) du numéro.
+
+
+\begin{align*}
+  &= \frac{SS_{Res}^{H_0} - SS_{Res}^{H_1}}{\Delta_{dl} s_{H_1}^2} \\
+  &= \frac{s_{H_0}^2 (23-3) - s_{H_1}^2 (23-4)}{1 * s_{H_1}^2} \\
+  &= \frac{18.12 (23-3) - 7.81(23-4)}{1 * 7.81} \\
+  &= 27.40 \\
+\end{align*}
+
+
+Les données montrent alors de la forte évidence contre $H_0$ puisque $Pr[F_{1,19} \geq 27.40] \approx 0$. On répond alors à l'administrateur que oui, les données montrent de l'évidence que changer le bonus de productivité affectera la qualité de stylos.
+
+
+
+
+## Chapitre 1 - Exercice 12
+
+###a)
+$$E[Y_i | m_{iA} = 1, m_{iB} = 0] = E[Y_i | m_{iA} = 0, m_{iB} = 1] = E[Y_i | m_{iA} = 0, m_{iB} = 0]$$
+$$\beta_0 + \beta_1x_i + \beta_A + \beta_2 x_i = \beta_0 + \beta_1x_i + \beta_B + \beta_3 x_i = \beta_0 + \beta_1x_i$$
+$$\beta_A + \beta_2 x_i = \beta_B + \beta_3 x_i = 0$$
+Puisque l'énoncé mentionne que ceci doit être valide peu importe le nombre d'heures consacrés au cours ($x_i$), alors on obtient que le test d'hypothèse revient à tester :
+\begin{align*}
+H_0&: \beta_A = \beta_B = \beta_2 = \beta_3 =0\\
+H_1&: \beta_A \neq \beta_B \neq \beta_2 \neq \beta_3 \neq 0 \\
+\end{align*}
+
+
+###b)
+Pour le manuel A, on obtient le résultat suivant:
+$$E[Y_i |x_i^{*}=x_i+1, m_{iA} = 1, m_{iB} = 0] - E[Y_i |x_i^{*}=x_i, m_{iA} = 1, m_{iB} = 0]$$
+$$ = \beta_0 + \beta_1(x_i+1) + \beta_A + \beta_2(x_i+1) - (\beta_0 + \beta_1x_i + \beta_A + \beta_2x_i)$$
+$$ = \beta_1 + \beta_2$$
+
+
+Pour le manuel B, on obtient le résultat suivant:
+$$E[Y_i |x_i^{*}=x_i+1, m_{iA} = 0, m_{iB} = 1] - E[Y_i |x_i^{*}=x_i, m_{iA} = 0, m_{iB} = 1]$$
+$$ = \beta_0 + \beta_1(x_i+1) + \beta_B + \beta_3(x_i+1) - (\beta_0 + \beta_1x_i + \beta_B + \beta_3x_i)$$
+$$ = \beta_1 + \beta_3$$
+
+Pour le manuel C, on obtient le résultat suivant:
+$$E[Y_i |x_i^{*}=x_i+1, m_{iA} = 0, m_{iB} = 0] - E[Y_i |x_i^{*}=x_i, m_{iA} = 0, m_{iB} = 0]$$
+$$ = \beta_0 + \beta_1(x_i+1) - (\beta_0 + \beta_1x_i)$$
+$$ = \beta_1$$
+
+Afin de tester si les 3 équations ci-dessus sont équivalentes, ceci revient à tester
+$$\beta_1 + \beta_2 = \beta_1 + \beta_3 = \beta_1 \ \ \ \Rightarrow \beta_2 = \beta_3 = 0$$
+
+Alors, on doit tester
+\begin{align*}
+H_0&: \beta_2 = \beta_3 = 0 \\
+H_1&: \beta_2 \neq \beta_3 \neq 0 \\
+\end{align*}
+
+
+###c)
+Nous voulons alors tester si
+
+$$E[Y|x^{*}_i = 1.25x_i,, m_{iA} = 0, m_{iB} = 0] = E[Y|x^{*}_i = x_i, m_{iA} = 0, m_{iB} = 1]$$
+$$\beta_0 + \beta_11.25x_i = \beta_0 + \beta_1x_i + \beta_B + \beta_3x_i$$
+ce qui revient à tester simultanément les 2 conditions suivantes en fonction des termes des coefficients du modèle:
+$$ H_0: \beta_B = 0, \ \ \ 0.25\beta_1 = \beta_3$$
+$$ H_0: \beta_B \neq 0, \ \ \ 0.25\beta_1 \neq \beta_3$$
+
+
+
+###d)
+On peut écrire ceci sous la forme suivante:
+
+$$E[Y|x^{*}_i = x_i + 1, m_{iA} = 1, m_{iB} = 0] - E[Y|x^{*}_i = x_i, m_{iA} = 1, m_{iB} = 0] $$
+$$ = E[Y|x^{*}_i = x_i+1.5, m_{iA} = 0, m_{iB} = 0] - E[Y|x^{*}_i = x_i, m_{iA} = 0, m_{iB} = 0]$$
+$$ \beta_0 + \beta_1(x_i+1) + \beta_A + \beta_2(x_i+1) -(\beta_0 + \beta_1x_i + \beta_A + \beta_2x_i))= \beta_0 + \beta_1(x_i+1.5) - (\beta_0 + \beta_1x_i)$$
+$$ \beta_1 + \beta_2= 1.5\beta_1$$
+Ce qui revient à tester l'hypothèse suivante:
+$$H_0: 0.5\beta_1 = \beta_2 $$
+$$H_1: 0.5\beta_1 \neq \beta_2 $$
+
+
+###e)
+En gardant la même notation que dans l'exercice et en respectant les 3 contraintes, on peut écrire le modèle de régression linéaire suivant :
+
+$$Y_i = \beta_0 + \beta_1 (max(x_i;5) - 5) + \beta_C(1-m_{iA}-m_{iB}) + \epsilon_i$$
+
+\newpage
+
+## Chapitre 2 - Exercice 2
+La fonction réciproque est la suivante: $g(u)=\frac{1}{u}$. Par conséquent, on obtient: $u_{i}=\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}$
+
+
+### a)
+Dans le cas où $x_{i1}$ augmente de 1, on obtient que Y augmente de:
+
+\begin{align*} 
+E[Y_{i};x_{i1}=x_{i1}^{*}+1]-E[Y_{i};x_{i1}=x_{i1}^{*}] &=  \frac{1}{\beta_{0}+\beta_{1}(x_{i1}+1)+x_{i2}} -\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}
+\end{align*}
+
+### b)
+Dans le cas où $x_{i2}$ augmente de 1, on obtient que Y augmente de:
+
+\begin{align*} 
+E[Y_{i};x_{i2}=x_{i2}^{*}+1]-E[Y_{i};x_{i2}=x_{i2}^{*}] &=  \frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}+1} -\frac{1}{\beta_{0}+\beta_{1}x_{i1}+x_{i2}}
+\end{align*}
+
+### c)
+On calcule les intervalles de confiance de Wald pour nos $\hat{\beta_{j}}$
+\begin{align*} 
+IC(\hat{\beta_{j}},\alpha)&= \hat{\beta_{j}} \pm z_{\alpha/2} \sqrt{\hat{Var(\hat{\beta_{j}})}}\\
+IC(\hat{\beta_{0}},0.95)&= 0.1 \pm 1.96 \sqrt{0.000625} =[0.051, 0.149]\\
+IC(\hat{\beta_{1}},0.95)&= -0.01 \pm 1.96 \sqrt{0.000016} =[-0.01784, -0.00216]
+\end{align*}
+
+### d)
+L'intervalle de confiance pour notre prédicteur linéaire $\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}}$ est $\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}} \pm z_{\alpha/2} \sqrt{v^{2}(\boldsymbol{x}_{0})}$
+
+
+\begin{align*} 
+v^{2}(\boldsymbol{x}_{0})&= \hat{Var}\left(\sum_{j=0}^{p'}x_{0j}\hat{\beta_{j}}\right)\\
+&=\hat{Var}(\hat{\beta_{0}})+ x_{01}^{2}\hat{Var}(\hat{\beta_{1}}) +2x_{01}\hat{Cov}(\hat{\beta_{0}},\hat{\beta_{1}})\\
+&=0.000625+5^{2}*0000016+2*5*-0.0001\\
+&=0.000025
+\end{align*}
+
+On obtient donc:
+
+$IC(\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}},0.95)=0.1-5*0.01+0.5 \pm 1.96\sqrt{0.000025} =[0.5402, 0.5598]$
+
+On peut maintenant trouver notre intervalle de confiance pour $Y_{i}$:
+
+$IC(Y_{i},0.95)=\frac{1}{IC(\boldsymbol{x}_{0}'\boldsymbol{\hat{\beta}},0.95)}=[1.786, 1.851166]$
+
+## Chapitre 2 - Exercice 4
+### a)
+Selon notre fonction, on obtient:
+
+
+\begin{align*} 
+\ell(\beta_{0},\beta_{1};y)&=\sum_{i=1}^{n} ln(f(y_{i}|x_{i};\beta_{0},\beta_{1})) \\
+&=\sum_{i=1}^{n} ln(\frac{1}{u_{i}}e^{-\frac{y_{i}}{u_{i}}})\\
+&=\sum_{i=1}^{n} ln(\frac{1}{u_{i}})-\frac{y_{i}}{u_{i}} \\
+&=\sum_{i=1}^{n} ln(\beta_{0}+\beta_{1}x_{i})-y_{i}(\beta_{0}+\beta_{1}x_{i})  \\
+\end{align*}
+
+### b) 
+On cherche la déviance. On sait que $\ell(u;Y)=\sum_{i=1}^{n} ln(\frac{1}{u_{i}})-\frac{y_{i}}{u_{i}}$
+
+\begin{align*} 
+D(Y,u)&=2(\ell(y;y)-\ell(u;y))\\
+&=2(\ell(y;y)-\ell(g^{-1}(\beta_{0}+\beta_{1}x_{i};y))\\
+&=2\left(\sum_{i=1}^{n} ln(\frac{1}{y_{i}})-\frac{y_{i}}{y_{i}}-\sum_{i=1}^{n} ln(\beta_{0}+\beta_{1}x_{i})-y_{i}(\beta_{0}+\beta_{1}x_{i})\right)\\
+&=2\left(\sum_{i=1}^{n} ln(\frac{1}{y_{i}})-1-ln(\beta_{0}+\beta_{1}x_{i})+y_{i}(\beta_{0}+\beta_{1}x_{i})\right)
+\end{align*}
+
+## Chapitre 2 - Exercice 5
+### a)
+On peut exprimer $u_{i}$ de la façon suivante:
+$u_{i}=exp\left(\beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+ln(v_{i})\right)=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}$. Par conséquent, si on remplace $v_{i}$ par $v_{i}^{*}=1.05v_{i}$, on obtient:
+
+\begin{align*} 
+u_{i}^{*}&=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}^{*}\\
+u_{i}^{*}&=e^{\beta_{0}}e^{\beta_{1}x_{i1}}e^{\beta_{2}x_{i2}}v_{i}1.05\\
+u_{i}^{*}&=u_{i}*1.05
+\end{align*}
+
+### b)
+
+\begin{align*} 
+u_{i}^{*}&=e^{\beta_{0}}e^{0.24(x_{i1}+1)}e^{\beta_{2}x_{i2}}v_{i}\\
+u_{i}^{*}&=e^{\beta_{0}}e^{0.24x_{i1}}e^{0.24}e^{\beta_{2}x_{i2}}v_{i}\\
+u_{i}^{*}&=u_{i}e^{0.24}\\
+u_{i}^{*}&=u_{i}1.27
+\end{align*}
+
+Lorsque $x_{i1}$ augmente de une unité, alors la moyenne augmente d'environ 27% ($e^{0.24}$).
+
+#### c)
+On procède au test d'hypothèse suivant:
+
+$H_{0}$: Le modèle poisson est suffisant 
+
+$H_{1}$: Le modèle binomiale négatif est nécessaire
+
+\begin{align*} 
+\epsilon&=D_{0}-D{1}=3.8\\
+p&=0.5P(\chi^{2}_{1}>\epsilon)
+&=0.5P(\chi^{2}_{1}>3.8)
+&=0.02562629
+\end{align*}
+
+Comme la p-value est inférieure à 0.05, on rejète l'hypothèse $H_{0}$. On doit utiliser le modèle de la négative binomiale.
+
+\newpage
+
+## Chapitre 3 - Exercice 1
+Commencons par une démonstration qui sera utile à quelques endroits lors de la preuve du théorème miracle.
+Pour la démonstration il est intéressant de regarder comment chaque valeur de la matrice $(X'X)$ est calculé. Chaque élément sera dénoté $(X'X)_{ij}$
+$$ (X'X)_{kj} = (X'X)_{jk} =  \sum_{n=1}^N X_{n,j} X_{n,k}$$
+Si une donnée est retirée de la sommation, il restera donc $N-1$ donnée dans la sommation. Par exemple, si la $i^e$ donnée est enlevée de la sommation, on retrouve :
+$$ (X'X)_{kj} = (X'X)_{jk} =  \sum_{n=1}^{N-1} X_{n,j} X_{n,k} + x_{i,j} x_{i,k}$$
+$$ \sum_{n=1}^{N-1} X_{n,j} X_{n,k} + x_{i,j} x_{i,k} = (X'_{-i,}X_{-i})_{kj} + x_{ij}x_{ik}' $$
+On passe de la forme de chaque élément à la forme matricielle.
+$$ (X'X) = (X'_{-i}X_{-i}) + x_ix_i' \ \ \ , \  \ \ (X'_{-i}X_{-i}) = (X'X) - x_ix_i' \  \ \ eq(3.1)  $$
+Le résultat 10 de la proposition 0.1 stipule que :
+$$ (A -vv')^{-1} = A^{-1} + \frac{A^{-1}vv'A^{-1}}{1-v'A^{-1}v} $$
+Il est possible de faire un paralèle avec les matrices de notre modèle linéaire. $A = X'X$ et $v = x_i$
+En remplacent ces matrices dans l'équations précédente, on obtient
+$$ (X'X - x_ix_i')^{-1} = (X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-x_i'(X'X)^{-1}x_i} $$
+Il est possible de remplacer le terme à gauche de l'équation par l'équation 3.1. Et $h_{ii} = x_i'(X'X)^{-1}x_i$
+$$ (X'_{-i}X_{-i})^{-1} = (X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-hii}  \  \ \ eq(3.2) $$
+Trouvons maitenant l'équation de $\hat{\beta}_{-i}$ en fonction de matrice contenant la donnée $i$ 
+$$ \hat{\beta}_{-i} =  (X'_{-i}X_{-i})^{-1} X'_{-i}Y_{-1} $$
+On peut remplacer $(X'_{-i}X_{-i})^{-1}$ par l'équation 3.2. De plus, en partant du même principe que l'équation 3.1, il est possible de prouver que $(X'_{-i}Y_{-i}) = (X'Y) - x_iy_i$. En remplacent ces deux termes dans l'équation précédente on obtient :
+$$ \hat{\beta}_{-i} = ((X'X)^{-1} + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}}{1-hii})(X'Y - x_iy_i)  $$
+$$ \hat{\beta}_{-i} = (X'X)^{-1}X'Y - (X'X)^{-1}x_iy_i + \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}X'Y}{1-hii} - \frac{(X'X)^{-1} x_ix_i' (X'X)^{-1}x_iy_i}{1-hii} $$
+$$ \hat{\beta}_{-i} = \hat{\beta} - (X'X)^{-1}x_iy_i +  \frac{(X'X)^{-1} x_ix_i'\hat{\beta}}{1-hii} - \frac{(X'X)^{-1} x_iy_ih_{ii}}{1-hii} $$
+$$ \hat{\beta}_{-i} = \hat{\beta} - (\frac{(X'X)^{-1}x_i}{1-h_{ii}})(y_i(1-h_{ii}) - x_i'\hat{\beta} + y_ih_{ii}) $$
+$$ \hat{\beta}_{-i} = \hat{\beta} - (\frac{(X'X)^{-1}x_i}{1-h_{ii}})(y_i - x_i'\hat{\beta})$$
+$$ \hat{\beta}_{-i} = \hat{\beta} - (\frac{(X'X)^{-1}x_i}{1-h_{ii}})(e_i)  \  \ \ eq(3.3)  $$
+On peut aussi écrire l'équation de $\hat{\beta}_{-i}$ de cette façon :
+$$ \hat{\beta}_{-i} = \hat{\beta} - (\frac{(X'X)^{-1}x_iy_i}{1-h_{ii}}) + \frac{x_i'(X'X)^{-1}x_i\hat{\beta}}{1-h_{ii}}) $$
+$$ \hat{\beta}_{-i} = \hat{\beta}(1 + \frac{h_{ii}}{1-h_{ii}}) - (\frac{(X'X)^{-1}x_iy_i}{1-h_{ii}}) $$
+$$ \hat{\beta}_{-i} = \frac{(X'X)^{-1}X'Y - (X'X)^{-1}x_iy_i}{1- h_{ii}}$$
+$$ \hat{\beta}_{-i} = \frac{(X'X)^{-1}(X'Y - x_iy_i)}{1- h_{ii}}$$
+On sait que :
+$$ e_{i,-i} = Y_i - x'_i\hat{\beta}_{-i} $$
+En remplacent la dernière forme de l'équation de $\hat{\beta}_{-i}$ dans l'équation ci-haut, on obtient la preuve de la partie c)
+$$ e_{i,-i} = \frac{Y_i(1-h_{ii}) - x_i'(X'X)^{-1}(X'Y - x_iy_i)}{1- h_{ii}} $$
+En remplacent le $\hat{\beta}_{-i}$ dans l'équation par l'équation 3.3, on obtient :
+$$ e_{i,-i} = Y_i - x'_i(\hat{\beta} - (\frac{(X'X)^{-1}x_i}{1-h_{ii}})(e_i)) $$
+$$ e_{i,-i} = Y_i - x'_i\hat{\beta} + (\frac{(x_i'X'X)^{-1}x_i}{1-h_{ii}})(e_i) $$
+$$ e_{i,-i} =e_i + \frac{h_{ii}e_i}{1-h_{ii}}$$
+$$ e_{i,-i} =\frac{e_i}{1-h_{ii}}$$
+
+\pagebreak
+
+# Questions Pratiques
+
+## P1
+```{r functions, echo=FALSE,include=FALSE}
+library(olsrr)
+library(ggplot2)
+library(car)
+library(MASS)
+library(stats)
+library(glmbb)
+library(glmnet)
+library(plotmo)  
+library(xts)
+library(sp)
+library(CASdatasets)
+options(scipen = 5)
+options(digits=5)
+data_tp1=read.table("weisberg56.dat",header=TRUE)
+```
+
+
+
+### Analyse de multicolinéarité
+Avant de faire notre modèle on peut procéder à une analyse de multicolinéarité en calculant nos facteur d'inflation de la variance (VIF):
+```{r analyse_multi_col1_p1,echo=FALSE}
+
+
+model1=lm(SOMA ~ WT2+HT2+WT9+HT9+LG9+ST9, data = data_tp1)
+
+ols_vif_tol(model1)
+ols_coll_diag(model1)
+
+
+```
+Avec cette analyse, on réalise qu'il a certains facteurs d'inflation de la variance supérieur à 10 (WT9 et LG9). On peut aussi observer certains indices de conditionnement qui sont calculés à partir des valeurs propres atteignent des valeurs supérieur à 30. Finalement, on constate que les variables WT9 et LG9 sont probablement en multicollinéarité, car leurs dépendances linéaires $p_{lj}$ sont supérieur à 60% pour l'indice de conditionnement le plus élevé (238.041>30). 
+
+Pour remédier au problème, on peut retirer la variable LG9:
+
+```{r analyse_multi_col2_p1,echo=FALSE}
+
+
+model2=lm(SOMA ~ WT2+HT2+WT9+HT9+ST9, data = data_tp1)
+
+ols_vif_tol(model2)
+
+
+
+```
+
+On constate qu'aucun VIF n'est maintenant supérieur à 10. On peut commencer à faire notre modèle avec ces variables.
+
+### Modèle
+Puisque qu'on a peu de variables dans nos données ($p'=5$), on peut se permettre de trouver tous les sous-modèles possibles pour ensuite choisir le meilleur:
+
+```{r tous_models_p1,echo=FALSE}
+
+
+model=lm(SOMA ~ WT2+HT2+WT9+HT9+ST9, data = data_tp1)
+
+all_possible<- ols_step_all_possible(model)
+
+#as.data.frame(all_possible[all_possible$fpe== min(all_possible$fpe), ])
+
+as.data.frame(all_possible[25:31,c("mindex","predictors","rsquare","adjr","predrsq","aic")])
+print("Modèle avec meilleur R2 ajusté")
+as.data.frame(all_possible[all_possible$adjr== max(all_possible$adjr), ])
+plot(all_possible)
+
+#ols_step_best_subset(model)
+
+
+```
+
+
+À partir de ces informations, on peut voir que, basé sur la valeur du $R^{2}_{adj}$, le meilleur modèle est celui qui inclut les variables WT2, WT9, HT9 et ST9 (on laisse tomber HT2). On peut toutefois voir que le modèle complet a un meilleur $R^{2}$ que notre modèle réduit. On peut confirmer que notre modèle réduit est toutefois le meilleur, il a également le plus faible AIC (89.471) et la plus grande valeur de $R^{2}_{prev}$ (basée sur PRESS) (0.25032). Les graphiques comfirment les mêmes résultats, notre modèle réduit (#26) est le plus adéquat.
+
+On peut maintenant faire notre prédiction:
+```{r prédiction_p1,echo=FALSE}
+
+
+model=lm(SOMA ~ WT2+WT9+HT9+ST9, data = data_tp1)
+vecteur_data=data.frame(WT2=13,WT9=41,HT9=141,ST9=73)
+
+
+#print("Prédiction pour E[Y]")
+#predict(model,newdata = vecteur_data,interval=c("confidence"),level=0.95)
+print("Prédiction pour Y")
+predict(model,newdata = vecteur_data,interval=c("prediction"),level=0.95)
+
+
+```
+
+Avec notre modèle, on peut prédire qu'un enfant de 9 ans ayant ces caractéristiques aurait un somatotype de 6.5168 à l'âge de 18 ans. L'intervalle de confiance 95% de cette estimé ponctuel est de [3.5355, 9.4981]
+
+\newpage
+
+## P2
+
+```{r intro_p2,echo=FALSE,include=FALSE}
+data_tp2=read.table("processed.cleveland.data",header=FALSE,sep = ",")
+
+head(data_tp2)
+
+names(data_tp2) = c("age"
+                , "sex"
+                , "cp"
+                , "trestbps"
+                , "chol"
+                , "fbs"
+                , "restecg"
+                , "thalach"
+                , "exang"
+                , "oldspeak"
+                , "slope"
+                , "ca"
+                , "thal"
+                , "num")
+
+head(data_tp2)
+dim(data_tp2)
+sort(unique(data_tp2$age))
+sort(unique(data_tp2$sex)) 
+sort(unique(data_tp2$cp)) #attention, cp est une variable qualitative!
+sort(unique(data_tp2$trestbps))
+sort(unique(data_tp2$chol))
+sort(unique(data_tp2$fbs))
+sort(unique(data_tp2$restecg)) #attention, restecg est une variable qualitative
+sort(unique(data_tp2$thalach))
+sort(unique(data_tp2$exang))
+sort(unique(data_tp2$oldspeak))
+sort(unique(data_tp2$slope)) #attention, slope est une variable qualitative
+sort(unique(data_tp2$ca)) # variable avec ? comme valeur
+sort(unique(data_tp2$thal)) # variable avec ? comme valeur
+sort(unique(data_tp2$num))
+
+#Puisqu'il y a seulement 6 observations avec des valeurs manquantes, on peut les ignorer sans conséquences.
+data_tp2=data_tp2[data_tp2$ca!="?",]
+
+data_tp2=data_tp2[data_tp2$thal!="?",]
+
+#Créons une variable Y qui sera binaire, donc soit 1 ou 0.
+data_tp2$Y=ifelse(data_tp2$num>0,1,0)
+data_tp2=data_tp2[,-which(names(data_tp2)=="num")]
+```
+
+
+Il est de mise de débuter en vérifiant s'il y a de la multicolinéarité dans la matrice schéma X.
+
+
+
+```{r multicolinearite_p2,echo=FALSE,include=TRUE}
+modele_lm_test <- lm(Y ~ age+
+                        sex+
+                        as.factor(cp)+
+                        trestbps+
+                        chol+
+                        fbs+
+                        as.factor(restecg)+
+                        thalach+
+                        exang+
+                        oldspeak+
+                        as.factor(slope)+
+                        as.numeric(ca)+
+                        as.factor(thal),
+                                          data = data_tp2)
+
+
+#regardons si nous avons présence de multicolinéarité
+ols_vif_tol(modele_lm_test) # calcul des VIF
+#il semble y avoir aucune corrélation puisque les VIF sont tous sous 10.
+```
+Alors, puisqu'aucun VIF est supérieur à 10, il n'y a pas présence de multicolinéarité entre les variables de la matrice X.
+
+
+
+On peut observer l'allure d'un modèle complet avant de commencer avec les méthodes de sélections de variables.
+```{r model complet_p2,echo=FALSE,include=TRUE}
+modele_complet = glm(Y ~ age+
+                       sex+
+                       as.factor(cp)+
+                       trestbps+
+                       chol+
+                       fbs+
+                       as.factor(restecg)+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                     family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+summary(modele_complet)$coefficients
+```
+L'AIC du modèle complet est de `r round(summary(modele_complet)$aic,2)`.
+
+
+On peut voir que quelques variables ne semblent pas statistiquement significatives. Alors, effectuons des méthodes algorithmiques pour sélectionner les variables et afin de s'assurer que nous obtenons le modèle avec les meilleures statistiques. Pour les méthodes pas-à-pas, d'inclusion et d'exclusion, on obtient le même modèle, soit le modèle contenant les variables:
+
+ + *thal*
+ + *ca*
+ + *cp*
+ + *oldspeak*
+ + *slope*
+ + *sex*
+ + *trestbps*
+ + *exang*
+ + *thalach*
+
+```{r selection1_p2,echo=FALSE,include=FALSE}
+modele_nul = glm(Y ~ 1,
+                  family=binomial(link=logit),data = data_tp2)
+
+
+## Sélection de variable avec forward
+model.for <- stepAIC(modele_nul,trace=FALSE,direction="forward",
+                   scope=list(upper="~ age+
+                              sex+
+                              as.factor(cp)+
+                              trestbps+
+                              chol+
+                              fbs+
+                              as.factor(restecg)+
+                              thalach+
+                              exang+
+                              oldspeak+
+                              as.factor(slope)+
+                              as.numeric(ca)+
+                              as.factor(thal)",
+                              lower="~1"),data=data_tp2)
+summary(model.for)$coefficients
+#(mieux que le modèle complet)
+  #thal
+  #ca
+  #cp
+  #oldspeak
+  #slope
+  #sex
+  #trestbps
+  #exang
+  #thalach
+
+
+model.back <- stepAIC(modele_complet,trace=FALSE,direction="backward",
+                     scope=list(upper="~ age+
+                                sex+
+                                as.factor(cp)+
+                                trestbps+
+                                chol+
+                                fbs+
+                                as.factor(restecg)+
+                                thalach+
+                                exang+
+                                oldspeak+
+                                as.factor(slope)+
+                                as.numeric(ca)+
+                                as.factor(thal)",
+                                lower="~1"),data=data_tp2)
+summary(model.back)
+#même chose que forward
+
+
+
+model.both <- stepAIC(modele_nul,trace=FALSE,direction="both",
+                      scope=list(upper="~ age+
+                                 sex+
+                                 as.factor(cp)+
+                                 trestbps+
+                                 chol+
+                                 fbs+
+                                 as.factor(restecg)+
+                                 thalach+
+                                 exang+
+                                 oldspeak+
+                                 as.factor(slope)+
+                                 as.numeric(ca)+
+                                 as.factor(thal)",
+                                 lower="~1"),data=data_tp2)
+summary(model.both)
+#pareil aux forward et backward
+
+```
+Et ce modèle nous donne un AIC de `r round(summary(model.for)$aic,2)` ce qui est mieux que le modèle complet avec un AIC de `r round(summary(modele_complet)$aic,2)`.
+
+
+
+
+```{r selection2_p2,echo=FALSE,include=FALSE}
+modele_lasso = glmnet(x = modele_complet$x[,-1], y = modele_complet$y, family = "binomial", alpha = 1)
+plot_glmnet(modele_lasso, xvar = "lambda")
+
+set.seed(11)
+cv_out=cv.glmnet(x = modele_complet$x[, -1], y = modele_complet$y, family = "binomial", alpha = 1)
+plot(cv_out)
+best_lam = cv_out$lambda.min
+other_lam = cv_out$lambda.1se
+coef(modele_lasso, s = best_lam) #revient à enlever l'age et fbs.
+coef(modele_lasso, s = other_lam) #revient à enlever l'age, chol, fbs, trestbps, restecg
+#allons voir leur statistique AIC
+model.lasso1 = glm(Y ~ sex+
+                       as.factor(cp)+
+                       trestbps+
+                       chol+
+                       as.factor(restecg)+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                     family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+model.lasso2 = glm(Y ~ sex+
+                     as.factor(cp)+
+                     thalach+
+                     exang+
+                     oldspeak+
+                     as.factor(slope)+
+                     as.numeric(ca)+
+                     as.factor(thal),
+                   family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+summary(model.lasso1)$coefficients
+summary(model.lasso2)$coefficients
+
+
+```
+
+Par la suite, on peut poursuivre avec la méthode LASSO. Ce modèle avec le meilleur $\lambda$ revient à enlever la variable *age* et *fbs* et le modèle en prenant le meilleur $\lambda$ plus sont écart type revient à enlever les variables *age*, *trestbps*, *chol*, *fbs* et *restecg*. Pour ces 2 modèles, on obtient un AIC de `r round(summary(model.lasso1)$aic,2)` et de `r round(summary(model.lasso2)$aic,2)` respectivement, ce qui est supérieur (donc moins bon) que les modèles trouvés plus haut.
+
+
+Par ailleurs, puisque le nombre de variables dans le jeu de données nous le permet, il est possible d'essayer tous les modèles possibles.
+
+```{r tous modèles_p2,echo=FALSE,include=FALSE}
+
+attach(data_tp2)
+modele.tous = glmbb(Y~age+
+                       sex+
+                       as.factor(cp)+
+                       trestbps+
+                       chol+
+                       fbs+
+                       as.factor(restecg)+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                  Y~1,criterion="AIC",
+                  cutoff=3,
+                  family=binomial(link=logit),data = data_tp2)
+summary(modele.tous)
+
+```
+
+On voit que, parmis tous les modèles possibles, on obtient le même modèle qu'obtenu avec les méthodes pas-à-pas, d'inclusion et d'exclusion lorsque notre critère de sélection est l'AIC.
+
+```{r final_p2,echo=FALSE,include=TRUE}
+
+#Voici le modèle final
+model_final = glm(Y ~ sex+
+                       as.factor(cp)+
+                       trestbps+
+                       thalach+
+                       exang+
+                       oldspeak+
+                       as.factor(slope)+
+                       as.numeric(ca)+
+                       as.factor(thal),
+                     family=binomial(link=logit),data = data_tp2,x = TRUE,y=TRUE)
+
+#summary(model_final)
+coef_final=as.matrix(model_final$coefficients,ncol=1)
+colnames(coef_final)="Coefficients"
+coef_final
+
+
+```
+
+Alors, les facteurs qui semblent être associés à une hausse d'un diagnostic positif de la maladie coronarienne sont:
+
+ + Être un homme
+ + La nature des douleurs à la poitrine
+      - Le fait d'avoir soit une angine atypique, une douleur non anginienne ou une douleur asymptomatique augmente la probabilité
+ + Plus la tension artérielle au repos à l'admission à l'hôpital est élevée
+ + Plus le pouls maximum atteint a une valeur réduite
+ + La présence d'angine induite par l'exercice
+ + Plus il y a une baisse dans ST induite par l'exercise par rapport au repos
+ + Une pente plate ou descendante du segment de ST lors de l'exercice maximal
+ + Plus il y a un nombre élevé de vaissaux sanguins majeurs colorés par fluroscopie
+ + Avoir un défaut réparable (lorsque *thal* vaut 7)
+ 
+ \newpage
+ 
+## P3
+
+```{r intro_p3,echo=FALSE,include=FALSE}
+data(ausprivauto0405)
+data_tp3 = subset(ausprivauto0405, select = c(-ClaimOcc,-ClaimAmount))
+head(data_tp3)
+sort(unique(data_tp3$Exposure)) #entre 0 et 1
+sort(unique(data_tp3$VehValue)) # Continue entre 0 et 35.56 (En milliers de $)
+sort(unique(data_tp3$VehAge)) # Variable Catégoriel à 4 modalités
+sort(unique(data_tp3$VehBody)) # Variable Catégoriel à 13 modalités
+sort(unique(data_tp3$Gender)) # Variable Catégoriel à 2 modalités
+sort(unique(data_tp3$DrivAge)) #Variable Catégoriel à 6 modalités
+sort(unique(data_tp3$ClaimNb)) #Variable réponse de 0 à 4
+```
+
+Il est préférable de regarder les facteurs d'inflations de la variance avant de commencer la modélisation.
+```{r multicolinearite_p3,echo=FALSE,include=TRUE}
+modele_complet_lm <- lm(ClaimNb ~VehValue+ VehAge + VehBody + Gender + DrivAge, data = data_tp3)
+ols_vif_tol(modele_complet_lm)
+```
+Il y a des variables avec un VIF plus grand que 10. Normalement il serait utile de retirer certaines variables. Par contre, ce sont seulement des catégories d'une variable qui sont affectées. Lorsqu'il y a une variable catégorielle avec *n* catégories dans le modèle, il y a *n-1* variables qui sont créées, qui sont des indicateurs 0,1 selon la catégorie représentée par la variable. Donc il est normal que ces variable souffrent de multicolinéarité. Ce n'est pas un problème, donc on garde tous les variables pour la modélisation.
+
+Pour chaque modèle qui sera testé il y aura un terme d'offset. Celui-ci est l'exposure, c'est à dire la proportion de l'année que l'assuré est couvert. L'espérence de son nombre d'accident sera ainsi proportionel à la proportion de l'année couvert par l'assuré. La méthodologie sera la suivante: 
+
+1. Faire un glm avec la loi de poisson et un lien log. Ajuster le meilleur modèle en utilisant des techniques algorithmiques tel que le foward, backward et la combinaison des deux.
+
+2. Faire un glm avec la loi de binomial négative et un lien log pour tenir compte de la surdispersion. Ajuster le meilleur modèle en utilisant des techniques algorithmiques tel que le foward, backward et la combinaison des deux.
+
+3. Faire un glm avec la loi poisson et binomial négative pour les variables trouvées retenues en 1 et 2. Pour chaque combinaison, faire un test de rapport de vraissemblance pour voir si le modèle poisson est correct ou si on doit prendre le modèle avec la loi binomial négative.
+
+```{r tous modèles_p3,echo=FALSE,include=FALSE}
+#Fit modele complet Poisson
+modele_complet_poisson <- glm(ClaimNb ~ VehValue+ VehAge + VehBody + Gender + DrivAge, offset(Exposure),
+                         family=poisson(link=log), data = data_tp3)
+summary(modele_complet_poisson)
+
+#Fit Modele Nul Poisson
+modele_nul_poisson <- glm(ClaimNb ~ 1, offset(Exposure),
+                       family=poisson(link=log), data = data_tp3)
+summary(modele_nul_poisson)
+
+## Sélection de variable avec forward Poisson
+model_poisson_for <- stepAIC(modele_nul_poisson,trace=FALSE,direction="forward",
+                     scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                lower="~1"),data=data_tp3)
+summary(model_poisson_for)
+
+# Selection de variable avec Backward Poisson
+model_poisson_back <- stepAIC(modele_complet_poisson,trace=FALSE,direction="backward",
+                             scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                        lower="~1"),data=data_tp3)
+summary(model_poisson_back)
+
+# Selection de variable avec Both Poisson
+model_poisson_both <- stepAIC(modele_nul_poisson,trace=FALSE,direction="both",
+                             scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                        lower="~1"),data=data_tp3)
+summary(model_poisson_both)$deviance
+
+
+
+
+
+#Fit modele complet NB1
+modele_complet_NB1 <- glm.nb(ClaimNb ~ VehValue+ VehAge + VehBody + Gender + DrivAge, offset(Exposure),
+                              link=log, data = data_tp3)
+summary(modele_complet_NB1)
+
+#Fit Modele Nul NB1
+modele_nul_NB1 <- glm.nb(ClaimNb ~ 1, offset(Exposure),
+                          link=log, data = data_tp3)
+summary(modele_nul_NB1)
+
+## Sélection de variable avec forward NB1
+model_NB1_for <- stepAIC(modele_nul_NB1,trace=FALSE,direction="forward",
+                             scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                        lower="~1"),data=data_tp3)
+summary(model_NB1_for)
+
+# Selection de variable avec Backward NB1
+model_NB1_back <- stepAIC(modele_complet_NB1,trace=FALSE,direction="backward",
+                              scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                         lower="~1"),data=data_tp3)
+summary(model_NB1_back)
+
+# Selection de variable avec Both NB1
+model_NB1_both <- stepAIC(modele_nul_NB1,trace=FALSE,direction="both",
+                              scope=list(upper= '~ VehValue+ VehAge + VehBody + Gender + DrivAge',
+                                         lower="~1"),data=data_tp3)
+summary(model_NB1_both)
+```
+
+Peu importe le modèle utilisé et la technique algorithmique utilisée, la sélection de variable est identique. Les variables qui sont utilisées sont *VehBody, DrivAge & VehAge* 
+
+À ce stade ci, on a un glm avec la loi de poisson et un avec la loi binomial négative. La loi binomial négative tient compte de la surdispersion. Un test des rapports de vraissemblance peut être fait pour déterminer si l'amélioration du modèle par la loi binomial négative est significative. La déviance du modèle de poisson est de *14 839* et la déviance du modèle avec la loi binomial négative est de *13 312*. La statistique de rapport de vraissemblance est de *1 527*. La pvalue associé est de 0. Donc on rejette l'hypothèse H0, on peut supposer qu'il y a de la variabilité extra poissonienne dans nos données.
+
+Les variables du modèles finales sont *VehBody, DrivAge & VehAge*. Le modèle est un glm avec la loi binomial négative avec le lien log. Le paramètre du surdispersion est de 1.6951. Il y a un terme d'offset qui est l'exposure. Voici le modèle finale :
+```{r modèles_final_p3,echo=FALSE,include=TRUE}
+summary(model_NB1_both)
+```
+La valeur relative du véhicule n'est pas associée au nombre de réclamations esperées. La relation entre la fréquence de sinistre et la valeur du véhicule ne fait pas beaucoup de sens. La valeur du véhicule serait plus associée à la sévérité des sinistres qu'à la fréquence. 
