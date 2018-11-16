@@ -1,0 +1,33 @@
+---
+title: "TP1 P3"
+output: pdf_document
+---
+# P3
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r intro,echo=FALSE,include=FALSE}
+library(xts)
+library(sp)
+library(CASdatasets)
+library(olsrr)
+library(ggplot2)
+library(car)
+library(MASS)
+library(stats)
+library(glmbb)
+library(glmnet)
+library(plotmo) 
+data(ausprivauto0405)
+data_tp3 = subset(ausprivauto0405, select = c(-ClaimOcc,-ClaimAmount))
+head(data_tp3)
+sort(unique(data_tp3$Exposure)) #entre 0 et 1
+sort(unique(data_tp3$VehValue)) # Continue entre 0 et 35.56 (En milliers de $)
+sort(unique(data_tp3$VehAge)) # Variable Catégoriel à 4 modalités
+sort(unique(data_tp3$VehBody)) # Variable Catégoriel à 13 modalités
+sort(unique(data_tp3$Gender)) # Variable Catégoriel à 2 modalités
+sort(unique(data_tp3$DrivAge)) #Variable Catégoriel à 6 modalités
+sort(unique(data_tp3$ClaimNb)) #Variable réponse de 0 à 4
+```
+## Analyse de la multicolinéarité de la matrice shéma X
